@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using FastAppFramework.Core;
+using FastAppFramework.Wpf;
 using Prism.Ioc;
 
 namespace FastAppFramework.Demo
@@ -13,7 +14,7 @@ namespace FastAppFramework.Demo
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : FastApplication
+    public partial class App : FastWpfApplication
     {
         protected override void OnInitialized()
         {
@@ -24,15 +25,9 @@ namespace FastAppFramework.Demo
             settings.Volatile = "Volatile changed from OnInitialized";
             this.Settings.Save();
         }
-        protected override Window CreateShell()
-        {
-            return new MainWindow();
-        }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             base.RegisterTypes(containerRegistry);
-
-            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {

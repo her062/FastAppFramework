@@ -1,8 +1,17 @@
-﻿<faf:FastApplication    x:Class="FastAppFramework.Demo.App"
+﻿<faf:FastWpfApplication x:Class="FastAppFramework.Demo.App"
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:faf="clr-namespace:FastAppFramework.Core;assembly=FastAppFramework.Core"
+                        xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
                         xmlns:local="clr-namespace:FastAppFramework.Demo">
+    <faf:FastWpfApplication.Config>
+        <faf:ApplicationConfiguration WindowTitle="Fast Application Framework - Demo" WindowSize="640 480" />
+    </faf:FastWpfApplication.Config>
+
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
-</faf:FastApplication>
+</faf:FastWpfApplication>

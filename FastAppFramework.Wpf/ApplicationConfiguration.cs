@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using FastAppFramework.Core;
+
+namespace FastAppFramework.Wpf
+{
+    public class ApplicationConfiguration
+    {
+#region Fields
+        public string WindowTitle
+        {
+            get; set;
+        }
+        public Size WindowSize
+        {
+            get; set;
+        }
+#endregion
+
+#region Constructor/Destructor
+        public ApplicationConfiguration()
+        {
+            // Setup Fields.
+            {
+                this.WindowTitle = ApplicationEnvironment.AssemblyName;
+                this.WindowSize = new Size(800, 450);
+            }
+        }
+#endregion
+    }
+}
