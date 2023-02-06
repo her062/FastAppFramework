@@ -17,6 +17,5 @@
     TextOptions.TextRenderingMode="Auto"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}">
-    <Grid>
-    </Grid>
+    <ContentControl prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.RootRegionName}" />
 </mah:MetroWindow>

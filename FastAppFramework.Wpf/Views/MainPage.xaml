@@ -1,0 +1,82 @@
+<UserControl x:Class="FastAppFramework.Wpf.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf.Views"
+    mc:Ignorable="d">
+    <md:DrawerHost IsLeftDrawerOpen="{Binding IsSelectingNavigationItem.Value}">
+        <md:DrawerHost.LeftDrawerContent>
+            <Grid MinWidth="360">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <!-- Search TextBox -->
+                <md:ColorZone Margin="12 12 12 0" Grid.Row="0" Padding="8" CornerRadius="4" Background="{StaticResource MaterialDesignTextFieldBoxBackground}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <md:PackIcon Grid.Column="0"
+                            Width="16" Height="16"
+                            VerticalAlignment="Center"
+                            Kind="Search" Opacity=".56" />
+                        <TextBox Grid.Column="1"
+                            Margin="8 0 0 0"
+                            VerticalAlignment="Center"
+                            md:HintAssist.Hint="Search"
+                            md:TextFieldAssist.DecorationVisibility="Hidden"
+                            md:TextFieldAssist.HasClearButton="True"
+                            BorderThickness="0" />
+                    </Grid>
+                </md:ColorZone>
+
+                <!-- TODO: Navigation ListBox -->
+                <ListBox>
+                </ListBox>
+            </Grid>
+        </md:DrawerHost.LeftDrawerContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Top app bar -->
+            <md:ColorZone Grid.Row="0"
+                Padding="16"
+                Mode="PrimaryMid"
+                Foreground="{StaticResource MaterialDesignBackground}"
+                md:ElevationAssist.Elevation="Dp4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ToggleButton Grid.Column="0"
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                        AutomationProperties.Name="HamburgerToggleButton"
+                        Width="24" Height="24"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding IsLeftDrawerOpen, RelativeSource={RelativeSource AncestorType={x:Type md:DrawerHost}}, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Column="1"
+                        Margin="24 0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20" SnapsToDevicePixels="True" Text="{Binding Headline.Value}" />
+                </Grid>
+            </md:ColorZone>
+
+            <!-- Main Region -->
+            <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.MainRegionName}" />
+        </Grid>
+    </md:DrawerHost>
+</UserControl>
