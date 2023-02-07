@@ -15,6 +15,8 @@
         <!-- Material Design: MahApps Compatibility -->
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
+        <!-- FastAppFramework Controls -->
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/TopAppBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- MahApps Brushes -->
@@ -37,6 +39,9 @@
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10" Color="{DynamicResource Primary500}" />
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10" Color="{DynamicResource Primary400}" />
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="{DynamicResource Primary500Foreground}" />
+
+    <!-- FastAppFramework Control Styles -->
+    <Style TargetType="{x:Type local:TopAppBar}" BasedOn="{StaticResource FastAppFramework.Wpf.TopAppBar}" />
 
     <!-- Frequently Converters -->
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />

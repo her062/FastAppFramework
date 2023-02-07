@@ -1,0 +1,105 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <ControlTemplate x:Key="TopAppBarTrailingItemsTemplate" TargetType="{x:Type ToolBar}">
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="SmallTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
+        <md:ColorZone x:Name="PART_Container"
+            Height="64"
+            Padding="16"
+            Foreground="{DynamicResource MaterialDesignBackground}"
+            Mode="PrimaryMid"
+            md:ElevationAssist.Elevation="Dp4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Leading Navigation Icon -->
+                <StackPanel Grid.Column="0"
+                    x:Name="PART_LeadingNavigationIcon"
+                    Orientation="Horizontal">
+                    <ToggleButton x:Name="PART_MenuButton"
+                        Width="24" Height="24"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding IsShowingNavigation, RelativeSource={RelativeSource AncestorType={x:Type local:TopAppBar}}}">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LeadingNavigation, RelativeSource={RelativeSource AncestorType={x:Type local:TopAppBar}}}" Value="Menu">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <Button x:Name="PART_BackButton"
+                        Width="24" Height="24"
+                        VerticalAlignment="Center"
+                        Content="{md:PackIcon Kind=ArrowLeft}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignToolForegroundButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LeadingNavigation, RelativeSource={RelativeSource AncestorType={x:Type local:TopAppBar}}}" Value="Back">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+
+                <!-- Headline -->
+                <TextBlock Grid.Column="1"
+                    x:Name="PART_Headline"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Text="{TemplateBinding Headline}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Margin" Value="16 0 0 0" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource AncestorType={x:Type local:TopAppBar}}}" Value="CenterAligned">
+                                    <Setter Property="Margin" Value="24 0 0 0" />
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- Trailing Icon -->
+                <!-- TODO: TrailingIcon is not declared -->
+            </Grid>
+        </md:ColorZone>
+    </ControlTemplate>
+    <ControlTemplate x:Key="MediumTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
+    </ControlTemplate>
+    <ControlTemplate x:Key="LargeTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
+    </ControlTemplate>
+
+    <Style x:Key="FastAppFramework.Wpf.TopAppBar" TargetType="{x:Type local:TopAppBar}">
+        <Setter Property="Template" Value="{StaticResource SmallTopAppBarTemplate}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource Self}}" Value="Medium">
+                <Setter Property="Template" Value="{StaticResource MediumTopAppBarTemplate}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource Self}}" Value="Large">
+                <Setter Property="Template" Value="{StaticResource LargeTopAppBarTemplate}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

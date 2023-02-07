@@ -8,7 +8,7 @@
     xmlns:faf="clr-namespace:FastAppFramework.Wpf"
     xmlns:local="clr-namespace:FastAppFramework.Wpf.Views"
     mc:Ignorable="d">
-    <md:DrawerHost IsLeftDrawerOpen="{Binding IsSelectingNavigationItem.Value}">
+    <md:DrawerHost IsLeftDrawerOpen="{Binding ShowNavigationDrawer.Value}">
         <md:DrawerHost.LeftDrawerContent>
             <Grid MinWidth="360">
                 <Grid.RowDefinitions>
@@ -48,32 +48,10 @@
             </Grid.RowDefinitions>
 
             <!-- Top app bar -->
-            <md:ColorZone Grid.Row="0"
-                Padding="16"
-                Mode="PrimaryMid"
-                Foreground="{StaticResource MaterialDesignBackground}"
-                md:ElevationAssist.Elevation="Dp4">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <ToggleButton Grid.Column="0"
-                        Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                        AutomationProperties.Name="HamburgerToggleButton"
-                        Width="24" Height="24"
-                        VerticalAlignment="Center"
-                        IsChecked="{Binding IsLeftDrawerOpen, RelativeSource={RelativeSource AncestorType={x:Type md:DrawerHost}}, Mode=TwoWay}" />
-
-                    <TextBlock Grid.Column="1"
-                        Margin="24 0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="20" SnapsToDevicePixels="True" Text="{Binding Headline.Value}" />
-                </Grid>
-            </md:ColorZone>
+            <faf:TopAppBar Grid.Row="0"
+                LeadingNavigation="Menu"
+                IsShowingNavigation="{Binding IsLeftDrawerOpen, RelativeSource={RelativeSource AncestorType={x:Type md:DrawerHost}}, Mode=TwoWay}"
+                Headline="{Binding Headline.Value}" />
 
             <!-- Main Region -->
             <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.MainRegionName}" />
