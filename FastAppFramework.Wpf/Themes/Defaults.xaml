@@ -17,6 +17,7 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
         <!-- FastAppFramework Controls -->
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/TopAppBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- MahApps Brushes -->
@@ -42,6 +43,7 @@
 
     <!-- FastAppFramework Control Styles -->
     <Style TargetType="{x:Type local:TopAppBar}" BasedOn="{StaticResource FastAppFramework.Wpf.TopAppBar}" />
+    <Style TargetType="{x:Type local:SearchBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchBar}" />
 
     <!-- Frequently Converters -->
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />

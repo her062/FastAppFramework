@@ -14,6 +14,10 @@ namespace FastAppFramework.Wpf.ViewModels
         {
             get; private set;
         }
+        public ReactivePropertySlim<bool> ShowNavigationDrawer
+        {
+            get; private set;
+        }
 #endregion
 
 #region Constructor/Destructor
@@ -22,6 +26,7 @@ namespace FastAppFramework.Wpf.ViewModels
             // Setup Properties.
             {
                 this.Headline = new ReactivePropertySlim<string?>("Welcome").AddTo(this);
+                this.ShowNavigationDrawer = new ReactivePropertySlim<bool>(false).AddTo(this);
             }
         }
 #endregion

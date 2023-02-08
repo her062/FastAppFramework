@@ -16,6 +16,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <!-- Search TextBox -->
+                <faf:SearchBar Grid.Row="0" Margin="12 12 12 0" />
+                <!--
                 <md:ColorZone Margin="12 12 12 0" Grid.Row="0" Padding="8" CornerRadius="4" Background="{StaticResource MaterialDesignTextFieldBoxBackground}">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -35,10 +37,9 @@
                             BorderThickness="0" />
                     </Grid>
                 </md:ColorZone>
+                -->
 
                 <!-- TODO: Navigation ListBox -->
-                <ListBox>
-                </ListBox>
             </Grid>
         </md:DrawerHost.LeftDrawerContent>
         <Grid>

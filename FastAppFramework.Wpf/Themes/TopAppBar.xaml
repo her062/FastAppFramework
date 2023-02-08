@@ -8,9 +8,7 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="TopAppBarTrailingItemsTemplate" TargetType="{x:Type ToolBar}">
-    </ControlTemplate>
-
+    <!-- Small TopAppBar Template -->
     <ControlTemplate x:Key="SmallTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
         <md:ColorZone x:Name="PART_Container"
             Height="64"
@@ -86,9 +84,15 @@
             </Grid>
         </md:ColorZone>
     </ControlTemplate>
+
+    <!-- Medium TopAppBar Template -->
     <ControlTemplate x:Key="MediumTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
+        <!-- TODO: Medium TopAppBar is not declared -->
     </ControlTemplate>
+
+    <!-- Large TopAppBar Template -->
     <ControlTemplate x:Key="LargeTopAppBarTemplate" TargetType="{x:Type local:TopAppBar}">
+        <!-- TODO: Large TopAppBar is not declared -->
     </ControlTemplate>
 
     <Style x:Key="FastAppFramework.Wpf.TopAppBar" TargetType="{x:Type local:TopAppBar}">
