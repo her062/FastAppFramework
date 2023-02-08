@@ -17,28 +17,6 @@
                 </Grid.RowDefinitions>
                 <!-- Search TextBox -->
                 <faf:SearchBar Grid.Row="0" Margin="12 12 12 0" />
-                <!--
-                <md:ColorZone Margin="12 12 12 0" Grid.Row="0" Padding="8" CornerRadius="4" Background="{StaticResource MaterialDesignTextFieldBoxBackground}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <md:PackIcon Grid.Column="0"
-                            Width="16" Height="16"
-                            VerticalAlignment="Center"
-                            Kind="Search" Opacity=".56" />
-                        <TextBox Grid.Column="1"
-                            Margin="8 0 0 0"
-                            VerticalAlignment="Center"
-                            md:HintAssist.Hint="Search"
-                            md:TextFieldAssist.DecorationVisibility="Hidden"
-                            md:TextFieldAssist.HasClearButton="True"
-                            BorderThickness="0" />
-                    </Grid>
-                </md:ColorZone>
-                -->
-
                 <!-- TODO: Navigation ListBox -->
             </Grid>
         </md:DrawerHost.LeftDrawerContent>

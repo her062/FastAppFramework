@@ -21,9 +21,25 @@ namespace FastAppFramework.Wpf.Views
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+#region Properties
+        public bool ShowPreferenceNavigationButton
+        {
+            get => (bool)GetValue(ShowPreferenceNavigationButtonProperty);
+            set => SetValue(ShowPreferenceNavigationButtonProperty, value);
+        }
+        public static readonly DependencyProperty ShowPreferenceNavigationButtonProperty = DependencyProperty.Register(
+            nameof(ShowPreferenceNavigationButton),
+            typeof(bool),
+            typeof(MainWindow),
+            new PropertyMetadata(true)
+        );
+#endregion
+
+#region Constructor/Destructor
         public MainWindow()
         {
             InitializeComponent();
         }
+#endregion
     }
 }

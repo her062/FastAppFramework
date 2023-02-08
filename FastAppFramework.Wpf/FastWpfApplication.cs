@@ -17,7 +17,9 @@ namespace FastAppFramework.Wpf
 #region Constants
         public const string RootRegionName = "RootRegion";
         public const string MainRegionName = "MainRegion";
+        public const string PreferenceRegionName = "PreferenceRegion";
         public const string MainPageName = "_main";
+        public const string PreferencePageName = "_preference";
 #endregion
 
 #region Properties
@@ -70,6 +72,7 @@ namespace FastAppFramework.Wpf
             // Register types for navigation.
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>(MainPageName);
+            containerRegistry.RegisterForNavigation<PreferencePage, PreferencePageViewModel>(PreferencePageName);
 
             this.Logger.LogDebug("");
         }
