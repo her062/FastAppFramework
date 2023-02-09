@@ -9,5 +9,6 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="*"/>
     <PackageReference Include="Prism.DryIoc" Version="*"/>
     <PackageReference Include="Newtonsoft.Json" Version="*"/>
+    <PackageReference Include="System.Reactive.Linq" Version="*"/>
   </ItemGroup>
 </Project>

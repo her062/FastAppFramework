@@ -22,6 +22,10 @@ namespace FastAppFramework.Wpf
         {
             get; set;
         }
+        public string? HomePage
+        {
+            get; set;
+        }
 #endregion
 
 #region Constructor/Destructor

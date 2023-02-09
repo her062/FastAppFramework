@@ -18,6 +18,14 @@
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}">
 
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="{md:PackIcon Home}" Visibility="{Binding ShowHomeNavigationButton.Value, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding HomeNavigationCommand}" />
+            </StackPanel>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <StackPanel Orientation="Horizontal">

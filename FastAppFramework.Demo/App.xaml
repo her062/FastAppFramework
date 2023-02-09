@@ -4,7 +4,10 @@
                         xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
                         xmlns:local="clr-namespace:FastAppFramework.Demo">
     <faf:FastWpfApplication.Config>
-        <faf:ApplicationConfiguration WindowTitle="Fast Application Framework - Demo" WindowSize="640 480" />
+        <faf:ApplicationConfiguration
+            WindowTitle="Fast Application Framework - Demo"
+            WindowSize="640 480"
+            HomePage="HomePage" />
     </faf:FastWpfApplication.Config>
 
     <Application.Resources>

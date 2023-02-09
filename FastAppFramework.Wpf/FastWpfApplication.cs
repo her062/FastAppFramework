@@ -20,6 +20,8 @@ namespace FastAppFramework.Wpf
         public const string PreferenceRegionName = "PreferenceRegion";
         public const string MainPageName = "_main";
         public const string PreferencePageName = "_preference";
+
+        public const string HomePageSetting = "home";
 #endregion
 
 #region Properties
@@ -73,6 +75,14 @@ namespace FastAppFramework.Wpf
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>(MainPageName);
             containerRegistry.RegisterForNavigation<PreferencePage, PreferencePageViewModel>(PreferencePageName);
+
+            this.Logger.LogDebug("");
+        }
+        protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
+        {
+            base.RegisterSettingTypes(settingRegistry);
+
+            settingRegistry.Register(new ApplicationSettingInfo(typeof(string), HomePageSetting){ DefaultValue = Config.HomePage, Variability = Variability.Volatile });
 
             this.Logger.LogDebug("");
         }

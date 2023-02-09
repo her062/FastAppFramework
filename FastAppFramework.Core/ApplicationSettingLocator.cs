@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace FastAppFramework.Core
 {
@@ -36,7 +37,10 @@ namespace FastAppFramework.Core
             if (type.DefaultValue != null)
                 return type.DefaultValue;
 
-            return Activator.CreateInstance(type.Type);
+            try { return Activator.CreateInstance(type.Type); }
+            catch (Exception ex) { FastApplication.Current.Logger.LogWarning(ex, ""); }
+
+            return null;
         }
     }
 }

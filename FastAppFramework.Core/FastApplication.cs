@@ -80,9 +80,8 @@ namespace FastAppFramework.Core
             base.OnInitialized();
 
             var catalog = this.Container.Resolve<IModuleCatalog>();
-            // Register setting types.
+            // Register setting types in modules.
             {
-                RegisterSettingTypes(this._settingContainer!);
                 foreach (var item in catalog.Modules)
                 {
                     var module = item as IFastAppModule;
@@ -100,6 +99,8 @@ namespace FastAppFramework.Core
 
             this._settingContainer = new ApplicationSettingContainer(containerRegistry);
             containerRegistry.RegisterInstance<IApplicationSettingProvider>(this._settingContainer);
+            // Register setting types.
+            RegisterSettingTypes(this._settingContainer);
 
             this.Logger.LogDebug("");
         }

@@ -30,7 +30,18 @@
             <faf:TopAppBar Grid.Row="0"
                 LeadingNavigation="Menu"
                 IsShowingNavigation="{Binding IsLeftDrawerOpen, RelativeSource={RelativeSource AncestorType={x:Type md:DrawerHost}}, Mode=TwoWay}"
-                Headline="{Binding Headline.Value}" />
+                Headline="{Binding Headline.Value}">
+                <faf:TopAppBar.Style>
+                    <Style TargetType="{x:Type faf:TopAppBar}" BasedOn="{StaticResource {x:Type faf:TopAppBar}}">
+                        <Setter Property="LeadingNavigation" Value="None" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasNavigationPages.Value}" Value="True">
+                                <Setter Property="LeadingNavigation" Value="Menu" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </faf:TopAppBar.Style>
+            </faf:TopAppBar>
 
             <!-- Main Region -->
             <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.MainRegionName}" />

@@ -19,24 +19,17 @@ namespace FastAppFramework.Demo
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
-            var settings = this.Container.Resolve<DemoSettings>();
-            settings.Nonvolatile = "Nonvolatile changed from OnInitialized";
-            settings.Volatile = "Volatile changed from OnInitialized";
-            this.Settings.Save();
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             base.RegisterTypes(containerRegistry);
+
+            // Register types for navigation.
+            containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
             base.RegisterSettingTypes(settingRegistry);
-
-            settingRegistry.Register<DemoSettings>();
-            var settings = this.Container.Resolve<DemoSettings>();
-            settings.Nonvolatile = "Nonvolatile changed from RegisterSettingTypes";
-            settings.Volatile = "Volatile changed from RegisterSettingTypes";
         }
     }
 }

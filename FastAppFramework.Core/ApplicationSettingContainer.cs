@@ -121,6 +121,7 @@ namespace FastAppFramework.Core
             this._values.Value.Add(type.Key, obj);
             if (!type.Type.IsPrimitive && type.Type != typeof(string) && type.Type != typeof(decimal))
                 this._containerRegistry.Register(type.Type, () => this.GetValue(type.Key));
+            OnPropertyChanged(type.Key);
         }
 
         public void Load(string? path = null)
