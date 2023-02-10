@@ -170,9 +170,18 @@ namespace FastAppFramework.Wpf.ViewModels
                     if (region?.Name == FastWpfApplication.PreferenceRegionName)
                     {
                         this._region = region;
+                        this._region.NavigationService.Navigated += PreferenceRegion_Navigated;
+                        if (this.SelectedNavigationItem.Value != null)
+                            this._region.RequestNavigate(this.SelectedNavigationItem.Value.View);
                     }
                 }
             }
+        }
+        private void PreferenceRegion_Navigated(object? sender, RegionNavigationEventArgs e)
+        {
+            var view = e.Uri.OriginalString;
+            if (view != this.SelectedNavigationItem.Value?.View)
+                this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
         }
 #endregion
     }

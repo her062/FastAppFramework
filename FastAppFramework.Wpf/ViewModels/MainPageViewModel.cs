@@ -95,12 +95,19 @@ namespace FastAppFramework.Wpf.ViewModels
                     if (region?.Name == FastWpfApplication.MainRegionName)
                     {
                         this._region = region;
+                        this._region.NavigationService.Navigated += MainRegion_Navigated;
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         if (!string.IsNullOrEmpty(home))
                             this._region.RequestNavigate(home);
                     }
                 }
             }
+        }
+        private void MainRegion_Navigated(object? sender, RegionNavigationEventArgs e)
+        {
+            var view = e.Uri.OriginalString;
+            if (view != this.SelectedNavigationItem.Value?.View)
+                this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
         }
 #endregion
     }
