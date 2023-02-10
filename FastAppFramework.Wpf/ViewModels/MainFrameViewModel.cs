@@ -14,7 +14,7 @@ using Prism.Ioc;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
-    public class MainPageViewModel : BindableBase
+    public class MainFrameViewModel : BindableBase
     {
 #region Internal Classes
         public class NavigationContainer : SideNavigationBarContainer
@@ -53,7 +53,7 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Constructor/Destructor
-        public MainPageViewModel(IRegionManager regionManager, IApplicationSettingProvider settingProvider)
+        public MainFrameViewModel(IRegionManager regionManager, IApplicationSettingProvider settingProvider)
         {
             // Setup Fields.
             {

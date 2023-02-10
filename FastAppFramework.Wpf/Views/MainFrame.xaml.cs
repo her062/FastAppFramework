@@ -6,9 +6,9 @@ using System.Windows.Controls;
 
 namespace FastAppFramework.Wpf.Views
 {
-    public partial class MainPage : UserControl
+    public partial class MainFrame : UserControl
     {
-        public MainPage()
+        public MainFrame()
         {
             InitializeComponent();
         }

@@ -116,9 +116,9 @@ namespace FastAppFramework.Wpf
         public const string RootRegionName = "RootRegion";
         public const string MainRegionName = "MainRegion";
         public const string PreferenceRegionName = "PreferenceRegion";
-        public const string MainPageName = "_main";
+        public const string MainFrameName = "_main";
         public const string MainNavigationContainerName = "_mainNavigationContainer";
-        public const string PreferencePageName = "_preference";
+        public const string PreferenceFrameName = "_preference";
         public const string PreferenceNavigationContainerName = "_preferenceNavigationContainer";
 
         public const string HomePageSetting = "home";
@@ -213,9 +213,9 @@ namespace FastAppFramework.Wpf
             base.RegisterRequiredTypes(containerRegistry);
 
             // Register instance for Main SideBar Navigation.
-            containerRegistry.RegisterInstance<SideNavigationBarContainer>(new MainPageViewModel.NavigationContainer(), MainNavigationContainerName);
+            containerRegistry.RegisterInstance<SideNavigationBarContainer>(new MainFrameViewModel.NavigationContainer(), MainNavigationContainerName);
             // Register instance for Preference SideBar Navigation.
-            containerRegistry.RegisterInstance<SideNavigationBarContainer>(new PreferencePageViewModel.NavigationContainer(), PreferenceNavigationContainerName);
+            containerRegistry.RegisterInstance<SideNavigationBarContainer>(new PreferenceFrameViewModel.NavigationContainer(), PreferenceNavigationContainerName);
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
@@ -228,8 +228,8 @@ namespace FastAppFramework.Wpf
         protected virtual void RegisterNavigationTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>(MainPageName);
-            containerRegistry.RegisterForNavigation<PreferencePage, PreferencePageViewModel>(PreferencePageName);
+            containerRegistry.RegisterForNavigation<MainFrame, MainFrameViewModel>(MainFrameName);
+            containerRegistry.RegisterForNavigation<PreferenceFrame, PreferenceFrameViewModel>(PreferenceFrameName);
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {

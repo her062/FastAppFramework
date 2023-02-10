@@ -6,9 +6,9 @@ using System.Windows.Controls;
 
 namespace FastAppFramework.Wpf.Views
 {
-    public partial class PreferencePage : UserControl
+    public partial class PreferenceFrame : UserControl
     {
-        public PreferencePage()
+        public PreferenceFrame()
         {
             InitializeComponent();
         }

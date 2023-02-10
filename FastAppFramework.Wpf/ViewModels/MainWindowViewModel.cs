@@ -67,13 +67,13 @@ namespace FastAppFramework.Wpf.ViewModels
                         (s, r) => (s && (r != null))
                     ).ToReactiveCommand()
                     .WithSubscribe(() => {
-                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.MainPageName);
+                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.MainFrameName);
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         this._mainRegion.Value?.RequestNavigate(home);
                     }).AddTo(this);
                 this.PreferenceNavigationCommand = this.HasPreferences.ToReactiveCommand()
                     .WithSubscribe(() => {
-                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.PreferencePageName);
+                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.PreferenceFrameName);
                     }).AddTo(this);
             }
 

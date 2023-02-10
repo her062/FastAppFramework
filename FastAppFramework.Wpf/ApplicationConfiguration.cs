@@ -35,7 +35,7 @@ namespace FastAppFramework.Wpf
             {
                 this.WindowTitle = ApplicationEnvironment.AssemblyName;
                 this.WindowSize = new Size(800, 450);
-                this.RootPage = FastWpfApplication.MainPageName;
+                this.RootPage = FastWpfApplication.MainFrameName;
             }
         }
 #endregion

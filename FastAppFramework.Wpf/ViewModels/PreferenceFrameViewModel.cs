@@ -12,7 +12,7 @@ using Reactive.Bindings.Extensions;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
-    public class PreferencePageViewModel : BindableBase, INavigationAware, IConfirmNavigationRequest
+    public class PreferenceFrameViewModel : BindableBase, INavigationAware, IConfirmNavigationRequest
     {
 #region Internal Classes
         public class NavigationContainer : SideNavigationBarContainer
@@ -75,7 +75,7 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Constructor/Destructor
-        public PreferencePageViewModel(IRegionManager regionManager, IApplicationSettingProvider settingProvider)
+        public PreferenceFrameViewModel(IRegionManager regionManager, IApplicationSettingProvider settingProvider)
         {
             // Setup Fields.
             {
