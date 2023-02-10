@@ -31,6 +31,7 @@ namespace FastAppFramework.Demo
             // Register types for navigation.
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
             containerRegistry.RegisterForNavigation<SamplePage, SamplePageViewModel>();
+            containerRegistry.RegisterForNavigation<DemoSettingsPage>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
