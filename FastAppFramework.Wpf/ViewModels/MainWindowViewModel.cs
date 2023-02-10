@@ -9,6 +9,7 @@ using FastAppFramework.Core;
 using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Prism.Ioc;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
@@ -26,7 +27,7 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Properties
-        public ReactivePropertySlim<bool> HasPreferences
+        public ReadOnlyReactivePropertySlim<bool> HasPreferences
         {
             get; private set;
         }
@@ -56,8 +57,7 @@ namespace FastAppFramework.Wpf.ViewModels
             // Setup Properties.
             {
                 this.ShowHomeNavigationButton = this._settingProvider.Observe<string>(FastWpfApplication.HomePageSetting).Select(v => !string.IsNullOrEmpty(v)).ToReadOnlyReactivePropertySlim().AddTo(this);
-                // TODO: HasPreferences should be determined by navigation items.
-                this.HasPreferences = new ReactivePropertySlim<bool>(true).AddTo(this);
+                this.HasPreferences = FastWpfApplication.Current.Container.Resolve<SideNavigationBarContainer>(FastWpfApplication.PreferenceNavigationContainerName).ObserveProperty(o => o.Count).Select(v => (v != 0)).ToReadOnlyReactivePropertySlim().AddTo(this);
             }
 
             // Setup Commands.

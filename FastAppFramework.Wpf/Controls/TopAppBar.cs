@@ -129,7 +129,10 @@ namespace FastAppFramework.Wpf
 
             this._backButton = Template.FindName(PART_BackButton, this) as Button;
             if (this._backButton != null)
+            {
+                this._backButton.IsEnabled = this.BackCommand?.CanExecute(null) ?? true;
                 this._backButton.Click += BackButton_Click;
+            }
         }
 #endregion
 
@@ -142,7 +145,10 @@ namespace FastAppFramework.Wpf
                 if (e.OldValue != null)
                     ((ICommand)e.OldValue).CanExecuteChanged -= obj.BackCommand_CanExecuteChanged;
                 if (e.NewValue != null)
+                {
                     ((ICommand)e.NewValue).CanExecuteChanged += obj.BackCommand_CanExecuteChanged;
+                    obj.BackCommand_CanExecuteChanged(e.NewValue, EventArgs.Empty);
+                }
             }
         }
         private void BackCommand_CanExecuteChanged(object? sender, EventArgs e)

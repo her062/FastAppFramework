@@ -6,6 +6,7 @@
     <PackageReference Include="MahApps.Metro" Version="*"/>
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="*"/>
     <PackageReference Include="ReactiveProperty" Version="*"/>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="*"/>
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>

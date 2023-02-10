@@ -21,6 +21,11 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Commands
+        public ReactiveCommand LoadCommand
+        {
+            get; private set;
+        }
+
         public ReactiveCommand BackCommand
         {
             get; private set;
@@ -53,13 +58,18 @@ namespace FastAppFramework.Wpf.ViewModels
         {
             get; private set;
         }
+
+        public ReactivePropertySlim<bool> CanGoBack
+        {
+            get; private set;
+        }
 #endregion
 
 #region Fields
         private IRegionManager _regionManager;
         private IApplicationSettingProvider _settingProvider;
         private IRegion? _region;
-        private ReactivePropertySlim<IRegionNavigationService?> _navigationService;
+        private IRegion? _rootRegion;
         private ReactivePropertySlim<bool> _hasChanges; 
         private ReactivePropertySlim<bool> _hasErrors;
 #endregion
@@ -71,7 +81,7 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this._regionManager = regionManager;
                 this._settingProvider = settingProvider;
-                this._navigationService = new ReactivePropertySlim<IRegionNavigationService?>(null, ReactivePropertyMode.RaiseLatestValueOnSubscribe).AddTo(this);
+                this._rootRegion = this._regionManager.Regions[FastWpfApplication.RootRegionName];
                 this._hasChanges = new ReactivePropertySlim<bool>().AddTo(this);
                 this._hasErrors = new ReactivePropertySlim<bool>().AddTo(this);
             }
@@ -81,13 +91,18 @@ namespace FastAppFramework.Wpf.ViewModels
                 this.Headline = new ReactivePropertySlim<string?>("Preferences").AddTo(this);
                 this.NavigationItems = FastWpfApplication.Current.Container.Resolve<SideNavigationBarContainer>(FastWpfApplication.PreferenceNavigationContainerName).ToReadOnlyReactiveCollection().AddTo(this);
                 this.SelectedNavigationItem = new ReactivePropertySlim<SideNavigationBarItem?>(null, ReactivePropertyMode.RaiseLatestValueOnSubscribe).AddTo(this);
+                this.CanGoBack = new ReactivePropertySlim<bool>(false).AddTo(this);
             }
 
             // Setup Commands.
             {
-                this.BackCommand = this._navigationService.Select(v => (v != null) && v.Journal.CanGoBack).ToReactiveCommand()
+                this.LoadCommand = new ReactiveCommand()
                     .WithSubscribe(() => {
-                        this._navigationService.Value?.Journal.GoBack();
+                        this.CanGoBack.Value = this._rootRegion.NavigationService.Journal.CanGoBack;
+                    }).AddTo(this);
+                this.BackCommand = this.CanGoBack.ToReactiveCommand()
+                    .WithSubscribe(() => {
+                        this._rootRegion.NavigationService.Journal.GoBack();
                     }).AddTo(this);
                 this.ApplyCommand = Observable.CombineLatest(
                         this._hasChanges, this._hasErrors,
@@ -132,7 +147,6 @@ namespace FastAppFramework.Wpf.ViewModels
         }
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            this._navigationService.Value = navigationContext.NavigationService;
         }
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
