@@ -170,19 +170,19 @@ namespace FastAppFramework.Wpf
                 var preferenceNavigationContainer = this.Container.Resolve<SideNavigationBarContainer>(PreferenceNavigationContainerName);
                 foreach (var item in this._containerRegistry.Types)
                 {
-                    SideNavigationBarAttribute.RegionType region;
-                    var navigationItem = SideNavigationBarAttribute.GetItem(item.Type, out region);
+                    NavigationPageAttribute.RegionType region;
+                    var navigationItem = NavigationPageAttribute.GetItem(item.Type, out region);
                     if (navigationItem != null)
                     {
                         switch (region)
                         {
-                            case SideNavigationBarAttribute.RegionType.Main:
+                            case NavigationPageAttribute.RegionType.Main:
                                 mainNavigationContainer?.Add(navigationItem);
                                 break;
-                            case SideNavigationBarAttribute.RegionType.Preference:
+                            case NavigationPageAttribute.RegionType.Preference:
                                 preferenceNavigationContainer?.Add(navigationItem);
                                 break;
-                            case SideNavigationBarAttribute.RegionType.Custom:
+                            case NavigationPageAttribute.RegionType.Custom:
                                 break;
                             default:
                                 throw new NotImplementedException();

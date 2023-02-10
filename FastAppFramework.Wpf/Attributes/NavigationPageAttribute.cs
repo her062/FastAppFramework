@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace FastAppFramework.Wpf
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class SideNavigationBarAttribute : Attribute
+    public class NavigationPageAttribute : Attribute
     {
 #region Constants
         public enum RegionType
@@ -37,7 +37,7 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Constructor/Destructor
-        public SideNavigationBarAttribute(string title)
+        public NavigationPageAttribute(string title)
         {
             // Setup Fields.
             {
@@ -48,9 +48,9 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Public Functions
-        public static SideNavigationBarAttribute? Get(Type type)
+        public static NavigationPageAttribute? Get(Type type)
         {
-            return Attribute.GetCustomAttribute(type, typeof(SideNavigationBarAttribute)) as SideNavigationBarAttribute;
+            return Attribute.GetCustomAttribute(type, typeof(NavigationPageAttribute)) as NavigationPageAttribute;
         }
         public static SideNavigationBarItem? GetItem(Type type, out RegionType region)
         {

@@ -7,8 +7,8 @@ using FastAppFramework.Wpf;
 
 namespace FastAppFramework.Demo
 {
-    [SideNavigationBar("Sample", Group = "Sample"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.CircleOutline)]
-    public partial class SamplePage : UserControl
+    [NavigationPage("Sample", Group = "Sample"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.CircleOutline)]
+    public partial class SamplePage : NavigationPage
     {
         public SamplePage()
         {

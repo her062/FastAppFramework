@@ -7,8 +7,8 @@ using FastAppFramework.Wpf;
 
 namespace FastAppFramework.Demo
 {
-    [SideNavigationBar("Demo", Region = SideNavigationBarAttribute.RegionType.Preference)]
-    public partial class DemoSettingsPage : UserControl
+    [NavigationPage("Demo", Region = NavigationPageAttribute.RegionType.Preference)]
+    public partial class DemoSettingsPage : NavigationPage
     {
         public DemoSettingsPage()
         {

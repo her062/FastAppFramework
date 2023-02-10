@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using Reactive.Bindings.Helpers;
 using Prism.Ioc;
+using System.ComponentModel;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
@@ -49,6 +50,7 @@ namespace FastAppFramework.Wpf.ViewModels
 #region Fields
         private IRegionManager _regionManager;
         private IRegion? _region;
+        private NavigationPageBase? _activePage;
         private IApplicationSettingProvider _settingProvider;
 #endregion
 
@@ -108,6 +110,24 @@ namespace FastAppFramework.Wpf.ViewModels
             var view = e.Uri.OriginalString;
             if (view != this.SelectedNavigationItem.Value?.View)
                 this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
+
+            if (this._activePage != null)
+                this._activePage.PropertyChanged -= ActivePage_PropertyChanged;
+            this._activePage = e.NavigationContext.NavigationService.Region.ActiveViews.First() as NavigationPageBase;
+            if (this._activePage != null)
+            {
+                this._activePage.PropertyChanged += ActivePage_PropertyChanged;
+                ActivePage_PropertyChanged(this._activePage, null);
+            }
+        }
+        private void ActivePage_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
+        {
+            var page = sender as NavigationPageBase;
+            if (page == null)
+                throw new ArgumentException(nameof(sender));
+
+            if ((e == null) || (e.PropertyName == nameof(page.Title)))
+                this.Headline.Value = page.Title;
         }
 #endregion
     }

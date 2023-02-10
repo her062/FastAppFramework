@@ -7,8 +7,8 @@ using FastAppFramework.Wpf;
 
 namespace FastAppFramework.Demo
 {
-    [SideNavigationBar("Home"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.Home)]
-    public partial class HomePage : UserControl
+    [NavigationPage("Home"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.Home)]
+    public partial class HomePage : NavigationPage
     {
         public HomePage()
         {
