@@ -18,6 +18,7 @@
         <!-- FastAppFramework Controls -->
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/TopAppBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SideNavigationBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- MahApps Brushes -->
@@ -44,6 +45,7 @@
     <!-- FastAppFramework Control Styles -->
     <Style TargetType="{x:Type local:TopAppBar}" BasedOn="{StaticResource FastAppFramework.Wpf.TopAppBar}" />
     <Style TargetType="{x:Type local:SearchBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchBar}" />
+    <Style TargetType="{x:Type local:SideNavigationBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SideNavigationBar}" />
 
     <!-- Frequently Converters -->
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />

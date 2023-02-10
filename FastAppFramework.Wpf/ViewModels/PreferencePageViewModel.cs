@@ -12,6 +12,12 @@ namespace FastAppFramework.Wpf.ViewModels
 {
     public class PreferencePageViewModel : BindableBase, INavigationAware, IConfirmNavigationRequest
     {
+#region Internal Classes
+        public class NavigationContainer : SideNavigationBarContainer
+        {
+        }
+#endregion
+
 #region Commands
         public ReactiveCommand BackCommand
         {

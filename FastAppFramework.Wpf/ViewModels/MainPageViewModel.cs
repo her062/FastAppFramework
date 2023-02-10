@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,11 +8,20 @@ using FastAppFramework.Core;
 using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using System.Reactive.Linq;
+using Reactive.Bindings.Helpers;
+using Prism.Ioc;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
     public class MainPageViewModel : BindableBase
     {
+#region Internal Classes
+        public class NavigationContainer : SideNavigationBarContainer
+        {
+        }
+#endregion
+
 #region Properties
         public ReactivePropertySlim<string?> Headline
         {
@@ -22,7 +32,15 @@ namespace FastAppFramework.Wpf.ViewModels
             get; private set;
         }
 
-        public ReactivePropertySlim<bool> HasNavigationPages
+        public ReadOnlyReactiveCollection<SideNavigationBarItem> NavigationItems
+        {
+            get; private set;
+        }
+        public ReadOnlyReactivePropertySlim<bool> HasNavigationPages
+        {
+            get; private set;
+        }
+        public ReactivePropertySlim<SideNavigationBarItem?> SelectedNavigationItem
         {
             get; private set;
         }
@@ -30,6 +48,7 @@ namespace FastAppFramework.Wpf.ViewModels
 
 #region Fields
         private IRegionManager _regionManager;
+        private IRegion? _region;
         private IApplicationSettingProvider _settingProvider;
 #endregion
 
@@ -46,13 +65,21 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this.Headline = new ReactivePropertySlim<string?>("Welcome").AddTo(this);
                 this.ShowNavigationDrawer = new ReactivePropertySlim<bool>(false).AddTo(this);
-                // TODO: HasNavigationPages should be determined by navigation items.
-                this.HasNavigationPages = new ReactivePropertySlim<bool>(true).AddTo(this);
+                this.NavigationItems = FastWpfApplication.Current.Container.Resolve<SideNavigationBarContainer>(FastWpfApplication.MainNavigationContainerName).ToReadOnlyReactiveCollection().AddTo(this);
+                this.SelectedNavigationItem = new ReactivePropertySlim<SideNavigationBarItem?>(null, ReactivePropertyMode.RaiseLatestValueOnSubscribe).AddTo(this);
+                this.HasNavigationPages = this.NavigationItems.ObserveProperty(o => o.Count).Select(v => (v != 0)).ToReadOnlyReactivePropertySlim().AddTo(this);
             }
 
             // Subscribes.
             {
                 this._regionManager.Regions.CollectionChanged += Regions_CollectionChanged;
+                this.SelectedNavigationItem.Subscribe(v => {
+                    if (v != null)
+                    {
+                        this._region?.RequestNavigate(v.View);
+                        this.ShowNavigationDrawer.Value = false;
+                    }
+                });
             }
         }
 
@@ -67,9 +94,10 @@ namespace FastAppFramework.Wpf.ViewModels
                     var region = item as IRegion;
                     if (region?.Name == FastWpfApplication.MainRegionName)
                     {
+                        this._region = region;
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         if (!string.IsNullOrEmpty(home))
-                            region.RequestNavigate(home);
+                            this._region.RequestNavigate(home);
                     }
                 }
             }

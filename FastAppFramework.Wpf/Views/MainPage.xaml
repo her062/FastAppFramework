@@ -8,17 +8,17 @@
     xmlns:faf="clr-namespace:FastAppFramework.Wpf"
     xmlns:local="clr-namespace:FastAppFramework.Wpf.Views"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="NavigationItemsSource" Source="{Binding NavigationItems}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
     <md:DrawerHost IsLeftDrawerOpen="{Binding ShowNavigationDrawer.Value}">
         <md:DrawerHost.LeftDrawerContent>
-            <Grid MinWidth="360">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <!-- Search TextBox -->
-                <faf:SearchBar Grid.Row="0" Margin="12 12 12 0" />
-                <!-- TODO: Navigation ListBox -->
-            </Grid>
+            <faf:SideNavigationBar Margin="0 12" MinWidth="360" ItemsSource="{Binding Source={StaticResource NavigationItemsSource}}" SelectedItem="{Binding SelectedNavigationItem.Value}" />
         </md:DrawerHost.LeftDrawerContent>
         <Grid>
             <Grid.RowDefinitions>

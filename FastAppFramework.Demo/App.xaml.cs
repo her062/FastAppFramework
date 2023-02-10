@@ -23,9 +23,14 @@ namespace FastAppFramework.Demo
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             base.RegisterTypes(containerRegistry);
+        }
+        protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
+        {
+            base.RegisterNavigationTypes(containerRegistry);
 
             // Register types for navigation.
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
+            containerRegistry.RegisterForNavigation<SamplePage, SamplePageViewModel>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {

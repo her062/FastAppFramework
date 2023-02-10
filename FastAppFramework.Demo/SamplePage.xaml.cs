@@ -7,10 +7,10 @@ using FastAppFramework.Wpf;
 
 namespace FastAppFramework.Demo
 {
-    [SideNavigationBar("Home"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.Home)]
-    public partial class HomePage : UserControl
+    [SideNavigationBar("Sample", Group = "Sample"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.CircleOutline)]
+    public partial class SamplePage : UserControl
     {
-        public HomePage()
+        public SamplePage()
         {
             InitializeComponent();
         }
