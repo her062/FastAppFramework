@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FastAppFramework.Core
 {
-    public abstract class CloneableModelBase : ModelBase, ICloneable
+    public abstract class CloneableModelBase : ModelBase, ICloneable, IComparable
     {
 #region Public Functions
         public object Clone()
@@ -14,6 +14,8 @@ namespace FastAppFramework.Core
             CopyTo(obj);
             return obj;
         }
+
+        public abstract int CompareTo(object? obj);
         public abstract void CopyTo(object obj);
 #endregion
 

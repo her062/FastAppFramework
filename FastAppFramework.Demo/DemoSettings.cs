@@ -36,6 +36,20 @@ namespace FastAppFramework.Demo
 #endregion
 
 #region Public Functions
+        public override int CompareTo(object? obj)
+        {
+            var item = obj as DemoSettings;
+            if (item == null)
+                throw new ArgumentException($"{obj?.GetType().Name} cannot convert to {typeof(DemoSettings).Name}");
+
+            int res = 0;
+            if ((res = string.Compare(this.Nonvolatile, item.Nonvolatile)) != 0)
+                return res;
+            if ((res = string.Compare(this.Volatile, item.Volatile)) != 0)
+                return res;
+
+            return 0;
+        }
         public override void CopyTo(object obj)
         {
             var item = obj as DemoSettings;
