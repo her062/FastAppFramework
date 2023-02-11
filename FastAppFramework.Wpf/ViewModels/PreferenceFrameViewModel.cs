@@ -45,6 +45,9 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Properties
+        public IRegion RootRegion => this._regionManager.Regions[FastWpfApplication.RootRegionName];
+        public IRegion Region => this._regionManager.Regions[FastWpfApplication.PreferenceRegionName];
+
         public ReactivePropertySlim<string?> Headline
         {
             get; private set;
@@ -68,8 +71,6 @@ namespace FastAppFramework.Wpf.ViewModels
 #region Fields
         private IRegionManager _regionManager;
         private IApplicationSettingProvider _settingProvider;
-        private IRegion? _region;
-        private IRegion? _rootRegion;
         private ReactivePropertySlim<bool> _hasChanges; 
         private ReactivePropertySlim<bool> _hasErrors;
 #endregion
@@ -81,7 +82,6 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this._regionManager = regionManager;
                 this._settingProvider = settingProvider;
-                this._rootRegion = this._regionManager.Regions[FastWpfApplication.RootRegionName];
                 this._hasChanges = new ReactivePropertySlim<bool>().AddTo(this);
                 this._hasErrors = new ReactivePropertySlim<bool>().AddTo(this);
             }
@@ -98,11 +98,11 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this.LoadCommand = new ReactiveCommand()
                     .WithSubscribe(() => {
-                        this.CanGoBack.Value = this._rootRegion.NavigationService.Journal.CanGoBack;
+                        this.CanGoBack.Value = this.RootRegion.NavigationService.Journal.CanGoBack;
                     }).AddTo(this);
                 this.BackCommand = this.CanGoBack.ToReactiveCommand()
                     .WithSubscribe(() => {
-                        this._rootRegion.NavigationService.Journal.GoBack();
+                        this.RootRegion.NavigationService.Journal.GoBack();
                     }).AddTo(this);
                 this.ApplyCommand = Observable.CombineLatest(
                         this._hasChanges, this._hasErrors,
@@ -129,12 +129,11 @@ namespace FastAppFramework.Wpf.ViewModels
 
             // Subscribes.
             {
-                this._regionManager.Regions.CollectionChanged += Regions_CollectionChanged;
                 this.SelectedNavigationItem.Subscribe(v => {
                     if (v == null)
                         return;
 
-                    this._region?.RequestNavigate(v.View);
+                    this.Region.RequestNavigate(v.View);
                 }).AddTo(this);
             }
         }
@@ -158,25 +157,6 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Private Functions
-        private void Regions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                if (e.NewItems == null)
-                    throw new ArgumentNullException(nameof(e.NewItems));
-                foreach (var item in e.NewItems)
-                {
-                    var region = item as IRegion;
-                    if (region?.Name == FastWpfApplication.PreferenceRegionName)
-                    {
-                        this._region = region;
-                        this._region.NavigationService.Navigated += PreferenceRegion_Navigated;
-                        if (this.SelectedNavigationItem.Value != null)
-                            this._region.RequestNavigate(this.SelectedNavigationItem.Value.View);
-                    }
-                }
-            }
-        }
         private void PreferenceRegion_Navigated(object? sender, RegionNavigationEventArgs e)
         {
             var view = e.Uri.OriginalString;

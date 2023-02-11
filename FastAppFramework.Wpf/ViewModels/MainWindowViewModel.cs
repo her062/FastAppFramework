@@ -27,6 +27,8 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Properties
+        public IRegion Region => this._regionManager.Regions[FastWpfApplication.RootRegionName];
+
         public ReadOnlyReactivePropertySlim<bool> HasPreferences
         {
             get; private set;
@@ -67,13 +69,14 @@ namespace FastAppFramework.Wpf.ViewModels
                         (s, r) => (s && (r != null))
                     ).ToReactiveCommand()
                     .WithSubscribe(() => {
-                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.MainFrameName);
+                        this.Region.RequestNavigate(FastWpfApplication.MainFrameName);
+
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         this._mainRegion.Value?.RequestNavigate(home);
                     }).AddTo(this);
                 this.PreferenceNavigationCommand = this.HasPreferences.ToReactiveCommand()
                     .WithSubscribe(() => {
-                        this._regionManager.Regions[FastWpfApplication.RootRegionName]?.RequestNavigate(FastWpfApplication.PreferenceFrameName);
+                        this.Region.RequestNavigate(FastWpfApplication.PreferenceFrameName);
                     }).AddTo(this);
             }
 

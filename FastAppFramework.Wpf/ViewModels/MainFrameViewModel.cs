@@ -24,6 +24,8 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Properties
+        public IRegion Region => this._regionManager.Regions[FastWpfApplication.MainRegionName];
+
         public ReactivePropertySlim<string?> Headline
         {
             get; private set;
@@ -49,7 +51,6 @@ namespace FastAppFramework.Wpf.ViewModels
 
 #region Fields
         private IRegionManager _regionManager;
-        private IRegion? _region;
         private NavigationPageBase? _activePage;
         private IApplicationSettingProvider _settingProvider;
 #endregion
@@ -76,11 +77,11 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this._regionManager.Regions.CollectionChanged += Regions_CollectionChanged;
                 this.SelectedNavigationItem.Subscribe(v => {
-                    if (v != null)
-                    {
-                        this._region?.RequestNavigate(v.View);
-                        this.ShowNavigationDrawer.Value = false;
-                    }
+                    if (v == null)
+                        return;
+
+                    this.Region.RequestNavigate(v.View);
+                    this.ShowNavigationDrawer.Value = false;
                 });
             }
         }
@@ -96,11 +97,11 @@ namespace FastAppFramework.Wpf.ViewModels
                     var region = item as IRegion;
                     if (region?.Name == FastWpfApplication.MainRegionName)
                     {
-                        this._region = region;
-                        this._region.NavigationService.Navigated += MainRegion_Navigated;
+                        this.Region.NavigationService.Navigated += MainRegion_Navigated;
+
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         if (!string.IsNullOrEmpty(home))
-                            this._region.RequestNavigate(home);
+                            this.Region.RequestNavigate(home);
                     }
                 }
             }

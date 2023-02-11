@@ -7,7 +7,7 @@ using FastAppFramework.Wpf;
 
 namespace FastAppFramework.Demo
 {
-    [NavigationPage("Home"), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.Home)]
+    [NavigationPage("Home", Region = NavigationPageAttribute.RegionType.Custom), MaterialDesignPageIcon(MaterialDesignThemes.Wpf.PackIconKind.Home)]
     public partial class HomePage : NavigationPage
     {
         public HomePage()
