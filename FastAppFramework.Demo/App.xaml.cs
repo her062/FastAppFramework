@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using FastAppFramework.Core;
-using FastAppFramework.Core.Generics;
 using FastAppFramework.Wpf;
 using Prism.Ioc;
 
