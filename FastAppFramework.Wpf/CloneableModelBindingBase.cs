@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace FastAppFramework.Wpf
         }
         public static ReactiveProperty<TDataType> Observe<TDataType>(this ReactiveProperty<TDataType> self, CloneableModelBindingBase observer)
         {
-            // TODO: The behavior to observe errors is not implemented, yet.
+            observer.ErrorObservers.Add(self);
             return self.Observe<ReactiveProperty<TDataType>, TDataType>(observer);
         }
     }
@@ -58,13 +59,16 @@ namespace FastAppFramework.Wpf
         {
             get; private set;
         }
+        public ReactiveCollection<IReactiveProperty> ErrorObservers
+        {
+            get; private set;
+        }
 #endregion
 
 #region Fields
         private UpdateModelTrigger _trigger;
         private CloneableModelBase _snapshot;
         private ReactivePropertySlim<bool> _isDirty;
-        private ReactivePropertySlim<bool> _hasErrors;
 #endregion
 
 #region Constructor/Destructor
@@ -75,14 +79,13 @@ namespace FastAppFramework.Wpf
                 this._trigger = trigger;
                 this._snapshot = TakeSnapshot(model, this._trigger);
                 this._isDirty = new ReactivePropertySlim<bool>(false).AddTo(this);
-                // TODO: The behavior to update the value that has errors or not is not implemented, yet.
-                this._hasErrors = new ReactivePropertySlim<bool>(false).AddTo(this);
             }
 
             // Setup Properties.
             {
                 this.IsDirty = this._isDirty.ToReadOnlyReactivePropertySlim().AddTo(this);
-                this.HasErrors = this._hasErrors.ToReadOnlyReactivePropertySlim().AddTo(this);
+                this.ErrorObservers = new ReactiveCollection<IReactiveProperty>().AddTo(this);
+                this.HasErrors = this.ErrorObservers.ObserveElementObservableProperty(o => o.ObserveHasErrors).CombineLatest(this.ErrorObservers.CollectionChangedAsObservable()).Select(_ => this.ErrorObservers.Any(v => v.ObserveHasErrors.MostRecent(false).First())).ToReadOnlyReactivePropertySlim().AddTo(this);
             }
 
             // Setup Commands.

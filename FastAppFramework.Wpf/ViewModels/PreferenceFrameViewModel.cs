@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FastAppFramework.Core;
+using Microsoft.Extensions.Logging;
 using Prism.Ioc;
 using Prism.Regions;
 using Reactive.Bindings;
@@ -112,8 +113,9 @@ namespace FastAppFramework.Wpf.ViewModels
                             if (page == null)
                                 continue;
 
-                            page.PropertyChanged += PreferencePage_PropertyChanged;
                             item.Page = page;
+                            page.PropertyChanged += PreferencePage_PropertyChanged;
+                            PreferencePage_PropertyChanged(page, null);
                         }
                     }).AddTo(this);
                 this.BackCommand = this.CanGoBack.ToReactiveCommand()
@@ -182,7 +184,7 @@ namespace FastAppFramework.Wpf.ViewModels
             if (view != this.SelectedNavigationItem.Value?.View)
                 this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
         }
-        private void PreferencePage_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void PreferencePage_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
         {
             var page = sender as PreferencePage;
             if (page == null)
@@ -193,11 +195,13 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 item.IsDirty = page.IsDirty;
                 this._isDirty.Value = this.NavigationItems.Any(v => v.IsDirty);
+                FastWpfApplication.Current.Logger.LogDebug($"{item.Title} IsDirty is Changed: {item.IsDirty}");
             }
             if ((e == null) || (e.PropertyName == nameof(page.HasErrors)))
             {
                 item.HasErrors = page.HasErrors;
                 this._hasErrors.Value = this.NavigationItems.Any(v => v.HasErrors);
+                FastWpfApplication.Current.Logger.LogDebug($"{item.Title} HasErrors is Changed: {item.HasErrors}");
             }
         }
 #endregion

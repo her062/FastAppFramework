@@ -17,7 +17,6 @@ namespace FastAppFramework.Demo
         {
             get; private set;
         }
-        [Required(AllowEmptyStrings = true)]
         public ReactiveProperty<string?> Volatile
         {
             get; private set;
