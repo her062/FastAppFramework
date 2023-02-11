@@ -77,13 +77,35 @@ namespace FastAppFramework.Wpf.Converters
 #endregion
     }
 
-    public class BooleanToVisibilityConverter : Generics.BooleanConverter<Visibility>
+    public class BooleanConverter<T> : BooleanConverter
+    {
+#region Properties
+        public new T? TrueValue
+        {
+            get { return (T?)base.TrueValue; }
+            set { base.TrueValue = value; }
+        }
+        public new T? FalseValue
+        {
+            get { return (T?)base.FalseValue; }
+            set { base.FalseValue = value; }
+        }
+#endregion
+
+#region Constructor/Destructor
+        public BooleanConverter(T? trueValue, T? falseValue) : base(trueValue, falseValue)
+        {
+        }
+#endregion
+    }
+
+    public class BooleanToVisibilityConverter : BooleanConverter<Visibility>
     {
         public BooleanToVisibilityConverter() : base(Visibility.Visible, Visibility.Collapsed)
         {
         }
     }
-    public class InverseBooleanConverter : Generics.BooleanConverter<bool>
+    public class InverseBooleanConverter : BooleanConverter<bool>
     {
         public InverseBooleanConverter() : base(false, true)
         {
