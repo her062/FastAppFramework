@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using FastAppFramework.Core;
+using FastAppFramework.Core.Generics;
 using FastAppFramework.Wpf;
 using Prism.Ioc;
 
@@ -31,11 +32,13 @@ namespace FastAppFramework.Demo
             // Register types for navigation.
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
             containerRegistry.RegisterForNavigation<SamplePage, SamplePageViewModel>();
-            containerRegistry.RegisterForNavigation<DemoSettingsPage>();
+            containerRegistry.RegisterForNavigation<DemoSettingsPage, DemoSettingsPageViewModel>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
             base.RegisterSettingTypes(settingRegistry);
+
+            settingRegistry.Register(new ApplicationSettingInfo<DemoSettings>("demo"){ Variability = Variability.Normal });
         }
     }
 }

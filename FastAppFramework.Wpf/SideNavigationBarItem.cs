@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
+using FastAppFramework.Core;
 
 namespace FastAppFramework.Wpf
 {
-    public class SideNavigationBarItem
+    public class SideNavigationBarItem : ModelBase
     {
 #region Fields
         public string View

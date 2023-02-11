@@ -8,7 +8,7 @@ using FastAppFramework.Wpf;
 namespace FastAppFramework.Demo
 {
     [NavigationPage("Demo", Region = NavigationPageAttribute.RegionType.Preference)]
-    public partial class DemoSettingsPage : NavigationPage
+    public partial class DemoSettingsPage : PreferencePage
     {
         public DemoSettingsPage()
         {

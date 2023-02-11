@@ -49,7 +49,7 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Private Functions
-        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var obj = d as NavigationPageBase;
             obj?.OnPropertyChanged(e.Property.Name);

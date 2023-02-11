@@ -53,6 +53,18 @@ namespace FastAppFramework.Wpf
             new FrameworkPropertyMetadata(null){ BindsTwoWayByDefault = true }
         );
 
+        public Style? ItemContainerStyle
+        {
+            get => (Style?)GetValue(ItemContainerStyleProperty);
+            set => SetValue(ItemContainerStyleProperty, value);
+        }
+        public static readonly DependencyProperty ItemContainerStyleProperty = DependencyProperty.Register(
+            nameof(ItemContainerStyle),
+            typeof(Style),
+            typeof(SideNavigationBar),
+            new PropertyMetadata(null)
+        );
+
         public DataTemplate? ItemTemplate
         {
             get => (DataTemplate?)GetValue(ItemTemplateProperty);

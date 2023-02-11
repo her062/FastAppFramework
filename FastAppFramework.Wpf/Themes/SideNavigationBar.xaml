@@ -8,6 +8,9 @@
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- SideNavigationBarItemContainerStyle -->
+    <Style x:Key="SideNavigationBarItemContainerStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MaterialDesignNavigationPrimaryListBoxItem}" />
+
     <!-- SideNavigationBarItem Template -->
     <DataTemplate x:Key="SideNavigationBarItemTemplate" DataType="{x:Type local:SideNavigationBarItem}">
         <Grid>
@@ -50,6 +53,7 @@
                 Margin="0 12 0 0"
                 ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                 SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                 ItemTemplate="{TemplateBinding ItemTemplate}">
                 <ListBox.GroupStyle>
                     <GroupStyle>
@@ -86,5 +90,6 @@
     <Style x:Key="FastAppFramework.Wpf.SideNavigationBar" TargetType="{x:Type local:SideNavigationBar}">
         <Setter Property="Template" Value="{StaticResource SideNavigationBarTemplate}" />
         <Setter Property="ItemTemplate" Value="{StaticResource SideNavigationBarItemTemplate}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource SideNavigationBarItemContainerStyle}" />
     </Style>
 </ResourceDictionary>

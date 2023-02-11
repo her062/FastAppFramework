@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -53,11 +54,11 @@ namespace FastAppFramework.Wpf.ViewModels
             get; private set;
         }
 
-        public ReadOnlyReactiveCollection<SideNavigationBarItem> NavigationItems
+        public ReadOnlyReactiveCollection<PreferenceNavigationBarItem> NavigationItems
         {
             get; private set;
         }
-        public ReactivePropertySlim<SideNavigationBarItem?> SelectedNavigationItem
+        public ReactivePropertySlim<PreferenceNavigationBarItem?> SelectedNavigationItem
         {
             get; private set;
         }
@@ -71,7 +72,7 @@ namespace FastAppFramework.Wpf.ViewModels
 #region Fields
         private IRegionManager _regionManager;
         private IApplicationSettingProvider _settingProvider;
-        private ReactivePropertySlim<bool> _hasChanges; 
+        private ReactivePropertySlim<bool> _isDirty; 
         private ReactivePropertySlim<bool> _hasErrors;
 #endregion
 
@@ -82,15 +83,16 @@ namespace FastAppFramework.Wpf.ViewModels
             {
                 this._regionManager = regionManager;
                 this._settingProvider = settingProvider;
-                this._hasChanges = new ReactivePropertySlim<bool>().AddTo(this);
+                this._isDirty = new ReactivePropertySlim<bool>().AddTo(this);
                 this._hasErrors = new ReactivePropertySlim<bool>().AddTo(this);
             }
 
             // Setup Properties.
             {
                 this.Headline = new ReactivePropertySlim<string?>("Preferences").AddTo(this);
-                this.NavigationItems = FastWpfApplication.Current.Container.Resolve<SideNavigationBarContainer>(FastWpfApplication.PreferenceNavigationContainerName).ToReadOnlyReactiveCollection().AddTo(this);
-                this.SelectedNavigationItem = new ReactivePropertySlim<SideNavigationBarItem?>(null, ReactivePropertyMode.RaiseLatestValueOnSubscribe).AddTo(this);
+                this.NavigationItems = FastWpfApplication.Current.Container.Resolve<SideNavigationBarContainer>(FastWpfApplication.PreferenceNavigationContainerName)
+                    .ToReadOnlyReactiveCollection(v => new PreferenceNavigationBarItem(v)).AddTo(this);
+                this.SelectedNavigationItem = new ReactivePropertySlim<PreferenceNavigationBarItem?>(null, ReactivePropertyMode.RaiseLatestValueOnSubscribe).AddTo(this);
                 this.CanGoBack = new ReactivePropertySlim<bool>(false).AddTo(this);
             }
 
@@ -99,24 +101,41 @@ namespace FastAppFramework.Wpf.ViewModels
                 this.LoadCommand = new ReactiveCommand()
                     .WithSubscribe(() => {
                         this.CanGoBack.Value = this.RootRegion.NavigationService.Journal.CanGoBack;
+
+                        var loader = FastWpfApplication.Current.Container.Resolve<IRegionNavigationContentLoader>();
+                        foreach (var item in this.NavigationItems)
+                        {
+                            if (item.Page != null)
+                                continue;
+
+                            var page = loader.LoadContent(this.Region, new NavigationContext(this.Region.NavigationService, new Uri(item.View, UriKind.RelativeOrAbsolute))) as PreferencePage;
+                            if (page == null)
+                                continue;
+
+                            page.PropertyChanged += PreferencePage_PropertyChanged;
+                            item.Page = page;
+                        }
                     }).AddTo(this);
                 this.BackCommand = this.CanGoBack.ToReactiveCommand()
                     .WithSubscribe(() => {
                         this.RootRegion.NavigationService.Journal.GoBack();
                     }).AddTo(this);
                 this.ApplyCommand = Observable.CombineLatest(
-                        this._hasChanges, this._hasErrors,
+                        this._isDirty, this._hasErrors,
                         (c, e) => (c && !e)
                     ).ToAsyncReactiveCommand()
                     .WithSubscribe(async () => {
+                        foreach (var item in this.NavigationItems)
+                            item.Page?.Apply();
                         await Task.Run(() => {
-                            // TODO: Apply Changes Behavior is not declared.
+                            this._settingProvider.Save();
                         });
                     }).AddTo(this);
-                this.RevertCommand = this._hasChanges.ToAsyncReactiveCommand()
+                this.RevertCommand = this._isDirty.ToAsyncReactiveCommand()
                     .WithSubscribe(async () => {
+                        foreach (var item in this.NavigationItems)
+                            item.Page?.Revert();
                         await Task.Run(() => {
-                            // TODO: Revert Changes Behavior is not declared.
                         });
                     }).AddTo(this);
                 this.ResetCommand = new AsyncReactiveCommand()
@@ -162,6 +181,24 @@ namespace FastAppFramework.Wpf.ViewModels
             var view = e.Uri.OriginalString;
             if (view != this.SelectedNavigationItem.Value?.View)
                 this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
+        }
+        private void PreferencePage_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            var page = sender as PreferencePage;
+            if (page == null)
+                throw new ArgumentException(nameof(sender));
+
+            var item = this.NavigationItems.First(v => (v.Page == page));
+            if ((e == null) || (e.PropertyName == nameof(page.IsDirty)))
+            {
+                item.IsDirty = page.IsDirty;
+                this._isDirty.Value = this.NavigationItems.Any(v => v.IsDirty);
+            }
+            if ((e == null) || (e.PropertyName == nameof(page.HasErrors)))
+            {
+                item.HasErrors = page.HasErrors;
+                this._hasErrors.Value = this.NavigationItems.Any(v => v.HasErrors);
+            }
         }
 #endregion
     }

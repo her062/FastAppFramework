@@ -16,10 +16,10 @@ namespace FastAppFramework.Wpf
             self.Subscribe(v => observer.Validate()).AddTo(observer);
             return self;
         }
-        public static IReactiveProperty<TDataType> Observe<TDataType>(this IReactiveProperty<TDataType> self, CloneableModelBindingBase observer)
+        public static ReactiveProperty<TDataType> Observe<TDataType>(this ReactiveProperty<TDataType> self, CloneableModelBindingBase observer)
         {
             // TODO: The behavior to observe errors is not implemented, yet.
-            return self.Observe<IReactiveProperty<TDataType>, TDataType>(observer);
+            return self.Observe<ReactiveProperty<TDataType>, TDataType>(observer);
         }
     }
 
@@ -93,10 +93,12 @@ namespace FastAppFramework.Wpf
                     ).ToReactiveCommand()
                     .WithSubscribe(() => {
                         this.Model.CopyTo(this.Snapshot);
+                        Validate();
                     }).AddTo(this);
                 this.RollbackCommand = this.IsDirty.ToReactiveCommand()
                     .WithSubscribe(() => {
                         this.Snapshot.CopyTo(this.Model);
+                        Validate();
                     }).AddTo(this);
             }
         }
