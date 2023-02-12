@@ -134,6 +134,7 @@ namespace FastAppFramework.Wpf
             get; set;
         }
 
+        private MainWindow? _shell;
         private ContainerRegistryWrapper? _containerRegistry;
 #endregion
 
@@ -199,14 +200,15 @@ namespace FastAppFramework.Wpf
         }
         protected override Window CreateShell()
         {
-            var obj = new MainWindow()
+            this._shell = new MainWindow()
             {
                 Title = this.Config.WindowTitle,
                 Width = this.Config.WindowSize.Width,
                 Height = this.Config.WindowSize.Height,
             };
+
             this.Logger.LogDebug("");
-            return obj;
+            return this._shell;
         }
         protected override void RegisterRequiredTypes(IContainerRegistry containerRegistry)
         {
@@ -227,6 +229,8 @@ namespace FastAppFramework.Wpf
         }
         protected virtual void RegisterNavigationTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterInstance<IDialogService>(new DialogService(this._shell!));
+
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
             containerRegistry.RegisterForNavigation<MainFrame, MainFrameViewModel>(MainFrameName);
             containerRegistry.RegisterForNavigation<PreferenceFrame, PreferenceFrameViewModel>(PreferenceFrameName);

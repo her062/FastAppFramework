@@ -7,5 +7,10 @@
     xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
     xmlns:local="clr-namespace:FastAppFramework.Demo"
     mc:Ignorable="d">
-    <TextBlock Text="This is a sample." />
+    <StackPanel Margin="16" Orientation="Vertical">
+        <Button Margin="0 0 0 0" Content="Show Input Dialog" Command="{Binding ShowInputDialogCommand}" />
+        <Button Margin="0 16 0 0" Content="Show Login Dialog" Command="{Binding ShowLoginDialogCommand}" />
+        <Button Margin="0 16 0 0" Content="Show Message Dialog" Command="{Binding ShowMessageDialogCommand}" />
+        <Button Margin="0 16 0 0" Content="Show Progress Dialog" Command="{Binding ShowProgressDialogCommand}" />
+    </StackPanel>
 </faf:NavigationPage>
