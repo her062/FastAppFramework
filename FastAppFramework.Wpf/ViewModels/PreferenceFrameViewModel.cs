@@ -72,17 +72,19 @@ namespace FastAppFramework.Wpf.ViewModels
 
 #region Fields
         private IRegionManager _regionManager;
+        private IDialogService _dialogService;
         private IApplicationSettingProvider _settingProvider;
         private ReactivePropertySlim<bool> _isDirty; 
         private ReactivePropertySlim<bool> _hasErrors;
 #endregion
 
 #region Constructor/Destructor
-        public PreferenceFrameViewModel(IRegionManager regionManager, IApplicationSettingProvider settingProvider)
+        public PreferenceFrameViewModel(IRegionManager regionManager, IDialogService dialogService, IApplicationSettingProvider settingProvider)
         {
             // Setup Fields.
             {
                 this._regionManager = regionManager;
+                this._dialogService = dialogService;
                 this._settingProvider = settingProvider;
                 this._isDirty = new ReactivePropertySlim<bool>().AddTo(this);
                 this._hasErrors = new ReactivePropertySlim<bool>().AddTo(this);
@@ -135,10 +137,13 @@ namespace FastAppFramework.Wpf.ViewModels
                     }).AddTo(this);
                 this.RevertCommand = this._isDirty.ToAsyncReactiveCommand()
                     .WithSubscribe(async () => {
+                        var res = await this._dialogService.ShowMessageAsync("Confirmation", "Are you sure to revert changes?", MahApps.Metro.Controls.Dialogs.MessageDialogStyle.AffirmativeAndNegative);
+                        if (res != MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative)
+                            return;
+
                         foreach (var item in this.NavigationItems)
                             item.Page?.Revert();
-                        await Task.Run(() => {
-                        });
+                        await Task.Run(() => {});
                     }).AddTo(this);
                 this.ResetCommand = new AsyncReactiveCommand()
                     .WithSubscribe(async () => {
