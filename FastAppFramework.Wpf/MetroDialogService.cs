@@ -8,9 +8,9 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace FastAppFramework.Wpf
 {
-    public static class DialogServiceExtensions
+    public static class MetroDialogServiceExtensions
     {
-        public static T GetDefault<T>(this T self, DialogService.DialogType type, CancellationToken? cancellationToken = null) where T : MetroDialogSettings
+        public static T GetDefault<T>(this T self, MetroDialogService.DialogType type, CancellationToken? cancellationToken = null) where T : MetroDialogSettings
         {
             self.CustomResourceDictionary = new System.Windows.ResourceDictionary(){ Source = new Uri($"pack://application:,,,/FastAppFramework.Wpf;component/Themes/{type.ToString()}Dialog.xaml") };
             if (cancellationToken != null)
@@ -18,7 +18,7 @@ namespace FastAppFramework.Wpf
             return self;
         }
     }
-    public class DialogService : IDialogService
+    public class MetroDialogService : IMetroDialogService
     {
 #region Constants
         public enum DialogType
@@ -36,7 +36,7 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Constructor/Destructor
-        public DialogService(MetroWindow window)
+        public MetroDialogService(MetroWindow window)
         {
             // Setup Fields.
             {
@@ -56,16 +56,16 @@ namespace FastAppFramework.Wpf
             var settings = (new MetroDialogSettings()).GetDefault(DialogType.Input, cancellationToken);
             return this._window.ShowModalInputExternal(title, message, settings);
         }
-        public Task<LoginDialogData?> ShowLoginAsync(string title, string message, LoginDialogSettings? settings = null)
-        {
-            settings = (settings ?? new LoginDialogSettings()).GetDefault(DialogType.Login);
-            return this._window.ShowLoginAsync(title, message, settings);
-        }
-        public LoginDialogData? ShowModalLoginExternal(string title, string message, LoginDialogSettings? settings = null)
-        {
-            settings = (settings ?? new LoginDialogSettings()).GetDefault(DialogType.Login);
-            return this._window.ShowModalLoginExternal(title, message, settings);
-        }
+//        public Task<LoginDialogData?> ShowLoginAsync(string title, string message, LoginDialogSettings? settings = null)
+//        {
+//            settings = (settings ?? new LoginDialogSettings(){ UsernameWatermark = "Username", PasswordWatermark = "Password" }).GetDefault(DialogType.Login);
+//            return this._window.ShowLoginAsync(title, message, settings);
+//        }
+//        public LoginDialogData? ShowModalLoginExternal(string title, string message, LoginDialogSettings? settings = null)
+//        {
+//            settings = (settings ?? new LoginDialogSettings()).GetDefault(DialogType.Login);
+//            return this._window.ShowModalLoginExternal(title, message, settings);
+//        }
         public Task<MessageDialogResult> ShowMessageAsync(string title, string message, MessageDialogStyle style = MessageDialogStyle.Affirmative, CancellationToken? cancellationToken = null)
         {
             var settings = (new MetroDialogSettings()).GetDefault(DialogType.Message, cancellationToken);

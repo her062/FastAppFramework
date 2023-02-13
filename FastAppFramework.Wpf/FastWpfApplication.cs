@@ -229,7 +229,7 @@ namespace FastAppFramework.Wpf
         }
         protected virtual void RegisterNavigationTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterInstance<IDialogService>(new DialogService(this._shell!));
+            containerRegistry.RegisterInstance<IMetroDialogService>(new MetroDialogService(this._shell!));
 
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
             containerRegistry.RegisterForNavigation<MainFrame, MainFrameViewModel>(MainFrameName);
@@ -239,7 +239,7 @@ namespace FastAppFramework.Wpf
         {
             base.RegisterSettingTypes(settingRegistry);
 
-            settingRegistry.Register(new ApplicationSettingInfo(typeof(string), HomePageSetting){ DefaultValue = Config.HomePage, Variability = Variability.Volatile });
+            settingRegistry.Register<string>(HomePageSetting, Config.HomePage, Variability.Volatile);
 
             this.Logger.LogDebug("");
         }

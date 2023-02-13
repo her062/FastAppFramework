@@ -9,7 +9,7 @@
     mc:Ignorable="d">
     <StackPanel Margin="16" Orientation="Vertical">
         <Button Margin="0 0 0 0" Content="Show Input Dialog" Command="{Binding ShowInputDialogCommand}" />
-        <Button Margin="0 16 0 0" Content="Show Login Dialog" Command="{Binding ShowLoginDialogCommand}" />
+        <!--<Button Margin="0 16 0 0" Content="Show Login Dialog" Command="{Binding ShowLoginDialogCommand}" />-->
         <Button Margin="0 16 0 0" Content="Show Message Dialog" Command="{Binding ShowMessageDialogCommand}" />
         <Button Margin="0 16 0 0" Content="Show Progress Dialog" Command="{Binding ShowProgressDialogCommand}" />
     </StackPanel>

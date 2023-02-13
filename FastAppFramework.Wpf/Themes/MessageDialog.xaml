@@ -4,10 +4,10 @@
     xmlns:local="clr-namespace:FastAppFramework.Wpf">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/Dialogs.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/MetroDialogs.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="MahApps.Styles.Button.Dialogs" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource DialogButtonStyle}" />
-    <Style x:Key="MahApps.Styles.Button.Dialogs.Accent" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource AccentDialogButtonStyle}" />
-    <Style x:Key="MahApps.Styles.Button.Dialogs.AccentHighlight" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource AccentDialogButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs.Accent" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogAccentButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs.AccentHighlight" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogAccentButtonStyle}" />
 </ResourceDictionary>

@@ -10,17 +10,17 @@
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" />
     <Style TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}" />
 
-    <Style x:Key="DialogButtonStyle" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+    <Style x:Key="MetroDialogButtonStyle" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
         <Setter Property="MinHeight" Value="35" />
         <Setter Property="MinWidth" Value="80" />
     </Style>
 
-    <Style x:Key="AccentDialogButtonStyle" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}">
+    <Style x:Key="MetroDialogAccentButtonStyle" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}">
         <Setter Property="MinHeight" Value="35" />
         <Setter Property="MinWidth" Value="80" />
     </Style>
 
-    <Style x:Key="MahApps.Styles.Button.Dialogs" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource AccentDialogButtonStyle}" />
-    <Style x:Key="MahApps.Styles.Button.Dialogs.Accent" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource DialogButtonStyle}" />
-    <Style x:Key="MahApps.Styles.Button.Dialogs.AccentHighlight" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource DialogButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogAccentButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs.Accent" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogButtonStyle}" />
+    <Style x:Key="MahApps.Styles.Button.Dialogs.AccentHighlight" TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MetroDialogButtonStyle}" />
 </ResourceDictionary>

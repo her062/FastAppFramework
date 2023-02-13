@@ -16,10 +16,10 @@ namespace FastAppFramework.Demo
         {
             get; private set;
         }
-        public AsyncReactiveCommand ShowLoginDialogCommand
-        {
-            get; private set;
-        }
+//        public AsyncReactiveCommand ShowLoginDialogCommand
+//        {
+//            get; private set;
+//        }
         public AsyncReactiveCommand ShowMessageDialogCommand
         {
             get; private set;
@@ -31,11 +31,11 @@ namespace FastAppFramework.Demo
 #endregion
 
 #region Fields
-        private IDialogService _dialogService;
+        private IMetroDialogService _dialogService;
 #endregion
 
 #region Constructor/Destructor
-        public SamplePageViewModel(IDialogService dialogService)
+        public SamplePageViewModel(IMetroDialogService dialogService)
         {
             // Setup Fields.
             {
@@ -49,10 +49,10 @@ namespace FastAppFramework.Demo
                         var response = await this._dialogService.ShowInputAsync("Sample Input Dialog", "Please input any characters");
                     }).AddTo(this);
 
-                this.ShowLoginDialogCommand = new AsyncReactiveCommand()
-                    .WithSubscribe(async () => {
-                        var response = await this._dialogService.ShowLoginAsync("Sample Login Dialog", "Please input any Username/Password");
-                    }).AddTo(this);
+//                this.ShowLoginDialogCommand = new AsyncReactiveCommand()
+//                    .WithSubscribe(async () => {
+//                        var response = await this._dialogService.ShowLoginAsync("Sample Login Dialog", "Please input any Username/Password");
+//                    }).AddTo(this);
 
                 this.ShowMessageDialogCommand = new AsyncReactiveCommand()
                     .WithSubscribe(async () => {

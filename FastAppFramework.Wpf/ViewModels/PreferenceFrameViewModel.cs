@@ -72,14 +72,14 @@ namespace FastAppFramework.Wpf.ViewModels
 
 #region Fields
         private IRegionManager _regionManager;
-        private IDialogService _dialogService;
+        private IMetroDialogService _dialogService;
         private IApplicationSettingProvider _settingProvider;
         private ReactivePropertySlim<bool> _isDirty; 
         private ReactivePropertySlim<bool> _hasErrors;
 #endregion
 
 #region Constructor/Destructor
-        public PreferenceFrameViewModel(IRegionManager regionManager, IDialogService dialogService, IApplicationSettingProvider settingProvider)
+        public PreferenceFrameViewModel(IRegionManager regionManager, IMetroDialogService dialogService, IApplicationSettingProvider settingProvider)
         {
             // Setup Fields.
             {
