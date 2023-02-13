@@ -102,6 +102,8 @@ namespace FastAppFramework.Wpf.ViewModels
                         var home = this._settingProvider.GetValue<string>(FastWpfApplication.HomePageSetting);
                         if (!string.IsNullOrEmpty(home))
                             this.Region.RequestNavigate(home);
+
+                        this._regionManager.Regions.CollectionChanged -= Regions_CollectionChanged;
                     }
                 }
             }

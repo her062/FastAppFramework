@@ -72,6 +72,7 @@ namespace FastAppFramework.Wpf.ViewModels
 
 #region Fields
         private IRegionManager _regionManager;
+        private NavigationPageBase? _activePage;
         private IMetroDialogService _dialogService;
         private IApplicationSettingProvider _settingProvider;
         private ReactivePropertySlim<bool> _isDirty; 
@@ -155,6 +156,7 @@ namespace FastAppFramework.Wpf.ViewModels
 
             // Subscribes.
             {
+                this._regionManager.Regions.CollectionChanged += Regions_CollectionChanged;
                 this.SelectedNavigationItem.Subscribe(v => {
                     if (v == null)
                         return;
@@ -183,11 +185,38 @@ namespace FastAppFramework.Wpf.ViewModels
 #endregion
 
 #region Private Functions
+        private void Regions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                if (e.NewItems == null)
+                    throw new ArgumentNullException(nameof(e.NewItems));
+                foreach (var item in e.NewItems)
+                {
+                    var region = item as IRegion;
+                    if (region?.Name == FastWpfApplication.PreferenceRegionName)
+                    {
+                        this.Region.NavigationService.Navigated += PreferenceRegion_Navigated;
+
+                        this._regionManager.Regions.CollectionChanged -= Regions_CollectionChanged;
+                    }
+                }
+            }
+        }
         private void PreferenceRegion_Navigated(object? sender, RegionNavigationEventArgs e)
         {
             var view = e.Uri.OriginalString;
             if (view != this.SelectedNavigationItem.Value?.View)
                 this.SelectedNavigationItem.Value = this.NavigationItems.FirstOrDefault(v => (v.View == view));
+
+            if (this._activePage != null)
+                this._activePage.PropertyChanged -= ActivePage_PropertyChanged;
+            this._activePage = e.NavigationContext.NavigationService.Region.ActiveViews.First() as NavigationPageBase;
+            if (this._activePage != null)
+            {
+                this._activePage.PropertyChanged += ActivePage_PropertyChanged;
+                ActivePage_PropertyChanged(this._activePage, null);
+            }
         }
         private void PreferencePage_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
         {
@@ -208,6 +237,15 @@ namespace FastAppFramework.Wpf.ViewModels
                 this._hasErrors.Value = this.NavigationItems.Any(v => v.HasErrors);
                 FastWpfApplication.Current.Logger.LogDebug($"{item.Title} HasErrors is Changed: {item.HasErrors}");
             }
+        }
+        private void ActivePage_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
+        {
+            var page = sender as NavigationPageBase;
+            if (page == null)
+                throw new ArgumentException(nameof(sender));
+
+            if ((e == null) || (e.PropertyName == nameof(page.Title)))
+                this.Headline.Value = $"Preferences - {page.Title}";
         }
 #endregion
     }
