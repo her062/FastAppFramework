@@ -26,6 +26,14 @@ namespace FastAppFramework.Wpf
         {
             get; set;
         }
+        public bool HasNotifyIcon
+        {
+            get; set;
+        }
+        public bool ExitConfirmation
+        {
+            get; set;
+        }
 #endregion
 
 #region Constructor/Destructor
@@ -36,6 +44,8 @@ namespace FastAppFramework.Wpf
                 this.WindowTitle = ApplicationEnvironment.AssemblyName;
                 this.WindowSize = new Size(800, 450);
                 this.RootPage = FastWpfApplication.MainFrameName;
+                this.HasNotifyIcon = false;
+                this.ExitConfirmation = false;
             }
         }
 #endregion

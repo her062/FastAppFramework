@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using Reactive.Bindings;
 
 namespace FastAppFramework.Wpf
 {
@@ -120,6 +121,7 @@ namespace FastAppFramework.Wpf
         public const string MainNavigationContainerName = "_mainNavigationContainer";
         public const string PreferenceFrameName = "_preference";
         public const string PreferenceNavigationContainerName = "_preferenceNavigationContainer";
+        public const string NotifyIconContextMenuContainerName = "_notifyIconContextMenuContainer";
 
         public const string HomePageSetting = "home";
 #endregion
@@ -148,6 +150,43 @@ namespace FastAppFramework.Wpf
         }
 #endregion
 
+#region Public Functions
+        public virtual void Activate()
+        {
+            if (this._shell == null)
+                throw new ApplicationException();
+
+            if (this._shell.Visibility != Visibility.Visible)
+                this._shell.Show();
+
+            this._shell.ShowInTaskbar = true;
+            this._shell.Topmost = true;
+            this._shell.Topmost = false;
+            this._shell.Activate();
+        }
+        public virtual void Deactivate()
+        {
+            if (this._shell == null)
+                throw new ApplicationException();
+
+            this._shell.Hide();
+            this._shell.ShowInTaskbar = false;
+        }
+        public virtual async Task<bool> Exiting()
+        {
+            if (this.Config.ExitConfirmation)
+            {
+                Activate();
+
+                var dialog = this.Container.Resolve<IMetroDialogService>();
+                var ret = await dialog.ShowMessageAsync("Confirmation", "Are you sure you want to exit?", MahApps.Metro.Controls.Dialogs.MessageDialogStyle.AffirmativeAndNegative);
+                if (ret != MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative)
+                    return false;
+            }
+            return true;
+        }
+#endregion
+
 #region Protected Functions
         protected override void OnInitialized()
         {
@@ -155,14 +194,15 @@ namespace FastAppFramework.Wpf
 
             if (this._containerRegistry != null)
             {
-                // Register navigation types in modules.
                 var catalog = this.Container.Resolve<IModuleCatalog>();
+
+                // Register navigation types in modules.
                 {
-                    RegisterNavigationTypes(this._containerRegistry!);
+                    RegisterNavigationTypes(this._containerRegistry);
                     foreach (var item in catalog.Modules)
                     {
                         var module = item as IFastWpfAppModule;
-                        module?.RegisterNavigationTypes(this._containerRegistry!);
+                        module?.RegisterNavigationTypes(this._containerRegistry);
                     }
                 }
 
@@ -189,6 +229,21 @@ namespace FastAppFramework.Wpf
                                 throw new NotImplementedException();
                         }
                     }
+                }
+
+                // Register ContextMenuItems.
+                var menuContainer = this.Container.Resolve<ContextMenuContainer>(NotifyIconContextMenuContainerName);
+                if (this.Config.HasNotifyIcon)
+                {
+                    RegisterNotifyIconContextMenuItems(menuContainer);
+                    foreach (var item in catalog.Modules)
+                    {
+                        var module = item as IFastWpfAppModule;
+                        module?.RegisterContextMenuItems(menuContainer);
+                    }
+                    // Add Separator immediately before 'Exit'.
+                    if (menuContainer.Count > 1)
+                        menuContainer.Add(int.MaxValue - 1);
                 }
             }
 
@@ -218,6 +273,15 @@ namespace FastAppFramework.Wpf
             containerRegistry.RegisterInstance<SideNavigationBarContainer>(new MainFrameViewModel.NavigationContainer(), MainNavigationContainerName);
             // Register instance for Preference SideBar Navigation.
             containerRegistry.RegisterInstance<SideNavigationBarContainer>(new PreferenceFrameViewModel.NavigationContainer(), PreferenceNavigationContainerName);
+            // Register instance for Notify Icon ContextMenu.
+            var container = new ContextMenuContainer();
+            containerRegistry.RegisterInstance<ContextMenuContainer>(container, NotifyIconContextMenuContainerName);
+            // Register instance for Notify Icon.
+            if (this.Config.HasNotifyIcon)
+            {
+                this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                containerRegistry.RegisterInstance<INotifyIconService>(new NotifyIconService(this.Config.WindowTitle, container));
+            }
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
@@ -240,6 +304,18 @@ namespace FastAppFramework.Wpf
             base.RegisterSettingTypes(settingRegistry);
 
             settingRegistry.Register<string>(HomePageSetting, Config.HomePage, Variability.Volatile);
+
+            this.Logger.LogDebug("");
+        }
+        protected virtual void RegisterNotifyIconContextMenuItems(ContextMenuContainer container)
+        {
+            // Add 'Exit' menu item.
+            container.Add("Exit", new ReactiveCommand().WithSubscribe(async () => {
+                    var res = await FastWpfApplication.Current.Exiting();
+                    if (!res)
+                        return;
+                    Application.Current.Shutdown();
+                }), int.MaxValue);
 
             this.Logger.LogDebug("");
         }

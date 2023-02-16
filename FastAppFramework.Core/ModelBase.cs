@@ -14,7 +14,7 @@ namespace FastAppFramework.Core
 #endregion
 
 #region Fields
-        private bool disposedValue;
+        private bool _disposed;
 #endregion
 
 #region Constructor/Destructor
@@ -38,13 +38,13 @@ namespace FastAppFramework.Core
 #region Protected Functions
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposed)
             {
                 if (disposing)
                 {
                     this.PropertyChanged = null;
                 }
-                disposedValue = true;
+                _disposed = true;
             }
         }
         protected void SetValue<T>(ref T obj, T value, [CallerMemberName] string? propertyName = null)

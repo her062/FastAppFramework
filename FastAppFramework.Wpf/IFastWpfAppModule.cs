@@ -11,6 +11,7 @@ namespace FastAppFramework.Wpf
     {
 #region Public Functions
         void RegisterNavigationTypes(IContainerRegistry containerRegistry);
+        void RegisterContextMenuItems(ContextMenuContainer container);
 #endregion
     }
 }

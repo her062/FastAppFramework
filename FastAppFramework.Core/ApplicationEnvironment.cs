@@ -28,7 +28,7 @@ namespace FastAppFramework.Core
                 return name;
             }
         }
-        public static string AssemblyFolder
+        public static string AssemblyFile
         {
             get
             {
@@ -42,9 +42,16 @@ namespace FastAppFramework.Core
                 if (string.IsNullOrEmpty(path))
                     throw new ApplicationException("Cannot determine the executable file path");
 
-                var folder = System.IO.Path.GetDirectoryName(path);
+                return path;
+            }
+        }
+        public static string AssemblyFolder
+        {
+            get
+            {
+                var folder = System.IO.Path.GetDirectoryName(AssemblyFile);
                 if (string.IsNullOrEmpty(folder))
-                    throw new ApplicationException($"The folder for {path} is null or empty");
+                    throw new ApplicationException($"The folder for {AssemblyFile} is null or empty");
 
                 return folder;
             }

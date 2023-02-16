@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Prism.Ioc;
+using System.Windows;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
@@ -21,6 +23,11 @@ namespace FastAppFramework.Wpf.ViewModels
             get; private set;
         }
         public ReactiveCommand PreferenceNavigationCommand
+        {
+            get; private set;
+        }
+
+        public ReactiveCommand<CancelEventArgs> ClosingCommand
         {
             get; private set;
         }
@@ -77,6 +84,21 @@ namespace FastAppFramework.Wpf.ViewModels
                 this.PreferenceNavigationCommand = this.HasPreferences.ToReactiveCommand()
                     .WithSubscribe(() => {
                         this.Region.RequestNavigate(FastWpfApplication.PreferenceFrameName);
+                    }).AddTo(this);
+
+                this.ClosingCommand = new ReactiveCommand<CancelEventArgs>()
+                    .WithSubscribe(async (e) => {
+                        e.Cancel = true;
+                        if (FastWpfApplication.Current.Config.HasNotifyIcon)
+                        {
+                            FastWpfApplication.Current.Deactivate();
+                            return;
+                        }
+
+                        var ret = await FastWpfApplication.Current.Exiting();
+                        if (!ret)
+                            return;
+                        Application.Current.Shutdown();
                     }).AddTo(this);
             }
 

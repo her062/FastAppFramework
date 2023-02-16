@@ -7,7 +7,9 @@
         <faf:ApplicationConfiguration
             WindowTitle="Fast Application Framework - Demo"
             WindowSize="640 480"
-            HomePage="HomePage" />
+            HomePage="HomePage"
+            HasNotifyIcon="True"
+            ExitConfirmation="True" />
     </faf:FastWpfApplication.Config>
 
     <Application.Resources>

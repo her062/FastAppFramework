@@ -21,9 +21,8 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Fields
-        private bool disposedValue;
         private CompositeDisposable _disposables;
-
+        private bool _disposed;
 #endregion
 
 #region Constructor/Destructor
@@ -82,14 +81,14 @@ namespace FastAppFramework.Wpf
 #region Protected Functions
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposed)
             {
                 if (disposing)
                 {
                     this._disposables.Dispose();
                 }
 
-                disposedValue = true;
+                _disposed = true;
             }
         }
 
