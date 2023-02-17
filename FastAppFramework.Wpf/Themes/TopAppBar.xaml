@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToolBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Small TopAppBar Template -->
@@ -28,7 +29,6 @@
                     x:Name="PART_LeadingNavigationIcon"
                     Orientation="Horizontal">
                     <ToggleButton x:Name="PART_MenuButton"
-                        Width="24" Height="24"
                         VerticalAlignment="Center"
                         IsChecked="{Binding IsShowingNavigation, RelativeSource={RelativeSource AncestorType={x:Type local:TopAppBar}}}">
                         <ToggleButton.Style>
@@ -43,9 +43,8 @@
                         </ToggleButton.Style>
                     </ToggleButton>
                     <Button x:Name="PART_BackButton"
-                        Width="24" Height="24"
                         VerticalAlignment="Center"
-                        Content="{md:PackIcon Kind=ArrowLeft}">
+                        Content="{md:PackIcon Kind=ArrowLeft, Size=24}">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignToolForegroundButton}">
                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -80,7 +79,13 @@
                 </TextBlock>
 
                 <!-- Trailing Icon -->
-                <!-- TODO: TrailingIcon is not declared -->
+                <ContentPresenter Grid.Column="2"
+                    x:Name="PART_TrailingIcon"
+                    Content="{TemplateBinding TrailingIcon}">
+                    <ContentPresenter.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignToolForegroundButton}" />
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </Grid>
         </md:ColorZone>
     </ControlTemplate>

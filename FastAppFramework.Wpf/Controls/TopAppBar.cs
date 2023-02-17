@@ -28,6 +28,7 @@ namespace FastAppFramework.Wpf
 
         private const string PART_Container = "PART_Container";
         private const string PART_LeadingNavigationIcon = "PART_LeadingNavigationIcon";
+        private const string PART_TrailingIcon = "PART_TrailingIcon";
         private const string PART_MenuButton = "PART_MenuButton";
         private const string PART_BackButton = "PART_BackButton";
         private const string PART_Headline = "PART_Headline";
@@ -44,6 +45,20 @@ namespace FastAppFramework.Wpf
             RoutingStrategy.Bubble,
             typeof(RoutedEventHandler),
             typeof(TopAppBar)
+        );
+#endregion
+
+#region Commands
+        public ICommand? BackCommand
+        {
+            get => (ICommand?)GetValue(BackCommandProperty);
+            set => SetValue(BackCommandProperty, value);
+        }
+        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(
+            nameof(BackCommand),
+            typeof(ICommand),
+            typeof(TopAppBar),
+            new PropertyMetadata(null, BackCommandPropertyChanged)
         );
 #endregion
 
@@ -74,8 +89,8 @@ namespace FastAppFramework.Wpf
 
         public string? Headline
         {
-            get;
-            set;
+            get => (string?)GetValue(HeadlineProperty);
+            set => SetValue(HeadlineProperty, value);
         }
         public static readonly DependencyProperty HeadlineProperty = DependencyProperty.Register(
             nameof(Headline),
@@ -86,8 +101,8 @@ namespace FastAppFramework.Wpf
 
         public bool IsShowingNavigation
         {
-            get;
-            set;
+            get => (bool)GetValue(IsShowingNavigationProperty);
+            set => SetValue(IsShowingNavigationProperty, value);
         }
         public static readonly DependencyProperty IsShowingNavigationProperty = DependencyProperty.Register(
             nameof(IsShowingNavigation),
@@ -96,16 +111,16 @@ namespace FastAppFramework.Wpf
             new PropertyMetadata(false)
         );
 
-        public ICommand? BackCommand
+        public StackPanel? TrailingIcon
         {
-            get => (ICommand?)GetValue(BackCommandProperty);
-            set => SetValue(BackCommandProperty, value);
+            get => (StackPanel?)GetValue(TrailingIconProperty);
+            set => SetValue(TrailingIconProperty, value);
         }
-        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(
-            nameof(BackCommand),
-            typeof(ICommand),
+        public static readonly DependencyProperty TrailingIconProperty = DependencyProperty.Register(
+            nameof(TrailingIcon),
+            typeof(StackPanel),
             typeof(TopAppBar),
-            new PropertyMetadata(null, BackCommandPropertyChanged)
+            new FrameworkPropertyMetadata(null, TrailingIconPropertyChanged)
         );
 #endregion
 
@@ -162,6 +177,15 @@ namespace FastAppFramework.Wpf
             RaiseEvent(new RoutedEventArgs(BackEvent, this));
             if ((this.BackCommand != null) && this.BackCommand.CanExecute(null))
                 this.BackCommand.Execute(null);
+        }
+
+        private static void TrailingIconPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var item = e.NewValue as StackPanel;
+            if (item == null)
+                return;
+
+            item.Orientation = Orientation.Horizontal;
         }
 #endregion
     }

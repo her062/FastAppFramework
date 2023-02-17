@@ -46,6 +46,10 @@ namespace FastAppFramework.Wpf.ViewModels
         {
             get; private set;
         }
+        public AsyncReactiveCommand ReloadCommand
+        {
+            get; private set;
+        }
 #endregion
 
 #region Properties
@@ -143,6 +147,19 @@ namespace FastAppFramework.Wpf.ViewModels
                         await Task.Run(() => {
                             this._settingProvider.ClearValue();
                             this._settingProvider.Save();
+                        });
+                        Reload();
+                    }).AddTo(this);
+                this.ReloadCommand = new AsyncReactiveCommand()
+                    .WithSubscribe(async () => {
+                        if (this._isDirty.Value)
+                        {
+                            var res = await this._dialogService.ShowMessageAsync("Confirmation", "Some settings are not saved, yet. Are you sure to reload it?", MahApps.Metro.Controls.Dialogs.MessageDialogStyle.AffirmativeAndNegative);
+                            if (res != MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative)
+                                return;
+                        }
+                        await Task.Run(() => {
+                            this._settingProvider.Load();
                         });
                         Reload();
                     }).AddTo(this);

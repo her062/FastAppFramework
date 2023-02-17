@@ -33,7 +33,13 @@
         <faf:TopAppBar Grid.Row="0"
             LeadingNavigation="Back"
             Headline="{Binding Headline.Value}"
-            BackCommand="{Binding BackCommand}" />
+            BackCommand="{Binding BackCommand}">
+            <faf:TopAppBar.TrailingIcon>
+                <StackPanel>
+                    <Button Content="{md:PackIcon Kind=Reload, Size=24}" Command="{Binding ReloadCommand}" />
+                </StackPanel>
+            </faf:TopAppBar.TrailingIcon>
+        </faf:TopAppBar>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
