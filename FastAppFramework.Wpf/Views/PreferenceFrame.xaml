@@ -36,7 +36,10 @@
             BackCommand="{Binding BackCommand}">
             <faf:TopAppBar.TrailingIcon>
                 <StackPanel>
-                    <Button Content="{md:PackIcon Kind=Reload, Size=24}" Command="{Binding ReloadCommand}" />
+                    <Button
+                        Content="{md:PackIcon Kind=Reload, Size=24}"
+                        ToolTip="Reload Settings"
+                        Command="{Binding ReloadCommand}" />
                 </StackPanel>
             </faf:TopAppBar.TrailingIcon>
         </faf:TopAppBar>
