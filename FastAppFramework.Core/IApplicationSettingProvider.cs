@@ -110,7 +110,7 @@ namespace FastAppFramework.Core
 
         object? GetValue(string key);
         void SetValue(string key, object? value);
-        void ClearValue(string key);
+        void ClearValue(string? key = null);
 #endregion
     }
 }

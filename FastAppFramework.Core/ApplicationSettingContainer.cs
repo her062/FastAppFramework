@@ -258,8 +258,14 @@ namespace FastAppFramework.Core
 
             SetValueInternal(key, value);
         }
-        public void ClearValue(string key)
+        public void ClearValue(string? key = null)
         {
+            if (key == null)
+            {
+                ClearAllValue();
+                return;
+            }
+
             var type = this._types.First(v => (v.Key == key));
             SetValue(key, ApplicationSettingLocator.Resolve(type));
         }
@@ -273,6 +279,11 @@ namespace FastAppFramework.Core
             else this._values.Value[key] = value;
 
             OnPropertyChanged(key);
+        }
+        private void ClearAllValue()
+        {
+            foreach (var type in this._types)
+                ClearValue(type.Key);
         }
 #endregion
     }

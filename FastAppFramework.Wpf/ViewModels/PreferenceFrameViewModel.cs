@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -11,6 +12,7 @@ using Prism.Ioc;
 using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using System.Windows;
 
 namespace FastAppFramework.Wpf.ViewModels
 {
@@ -105,21 +107,7 @@ namespace FastAppFramework.Wpf.ViewModels
                 this.LoadCommand = new ReactiveCommand()
                     .WithSubscribe(() => {
                         this.CanGoBack.Value = this.RootRegion.NavigationService.Journal.CanGoBack;
-
-                        var loader = FastWpfApplication.Current.Container.Resolve<IRegionNavigationContentLoader>();
-                        foreach (var item in this.NavigationItems)
-                        {
-                            if (item.Page != null)
-                                continue;
-
-                            var page = loader.LoadContent(this.Region, new NavigationContext(this.Region.NavigationService, new Uri(item.View, UriKind.RelativeOrAbsolute))) as PreferencePage;
-                            if (page == null)
-                                continue;
-
-                            item.Page = page;
-                            page.PropertyChanged += PreferencePage_PropertyChanged;
-                            PreferencePage_PropertyChanged(page, null);
-                        }
+                        Refresh();
                     }).AddTo(this);
                 this.BackCommand = this.CanGoBack.ToReactiveCommand()
                     .WithSubscribe(() => {
@@ -148,9 +136,15 @@ namespace FastAppFramework.Wpf.ViewModels
                     }).AddTo(this);
                 this.ResetCommand = new AsyncReactiveCommand()
                     .WithSubscribe(async () => {
+                        var res = await this._dialogService.ShowMessageAsync("Confirmation", "Are you sure to reset all settings as default?", MahApps.Metro.Controls.Dialogs.MessageDialogStyle.AffirmativeAndNegative);
+                        if (res != MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative)
+                            return;
+
                         await Task.Run(() => {
-                            // TODO: Restore Defaults Behavior is not declared.
+                            this._settingProvider.ClearValue();
+                            this._settingProvider.Save();
                         });
+                        Reload();
                     }).AddTo(this);
             }
 
@@ -181,6 +175,32 @@ namespace FastAppFramework.Wpf.ViewModels
         public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
         {
             continuationCallback(!navigationContext.Uri.Equals(navigationContext.NavigationService.Journal.CurrentEntry.Uri));
+        }
+
+        public void Refresh()
+        {
+            var loader = FastWpfApplication.Current.Container.Resolve<IRegionNavigationContentLoader>();
+            foreach (var item in this.NavigationItems)
+            {
+                var page = loader.LoadContent(this.Region, new NavigationContext(this.Region.NavigationService, new Uri(item.View, UriKind.RelativeOrAbsolute))) as PreferencePage;
+                if (page == null)
+                    continue;
+
+                if (item.Page != null)
+                    item.Page.PropertyChanged -= PreferencePage_PropertyChanged;
+
+                item.Page = page;
+                item.Page.PropertyChanged += PreferencePage_PropertyChanged;
+                PreferencePage_PropertyChanged(page, null);
+            }
+
+            if (this.SelectedNavigationItem.Value != null)
+                this.Region.RequestNavigate(this.SelectedNavigationItem.Value.View);
+        }
+        public void Reload()
+        {
+            this.Region.RemoveAll();
+            Refresh();
         }
 #endregion
 
