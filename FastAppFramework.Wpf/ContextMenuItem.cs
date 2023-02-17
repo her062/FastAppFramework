@@ -22,15 +22,24 @@ namespace FastAppFramework.Wpf
 #endregion
 
 #region Properties
+        public IList<ContextMenuItem>? Owner
+        {
+            get => this._owner;
+            internal set => this._owner = value;
+        }
+
         public ContextMenuItemType Type => this._type;
         public int Order
         {
             get => this._order;
             set => SetValue(ref this._order, value);
         }
+
+        public int Index => this.Owner?.IndexOf(this) ?? -1;
 #endregion
 
 #region Fields
+        private IList<ContextMenuItem>? _owner;
         private ContextMenuItemType _type;
         private int _order;
 #endregion

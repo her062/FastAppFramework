@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace FastAppFramework.Wpf
 {
@@ -41,6 +42,43 @@ namespace FastAppFramework.Wpf
 #region Constructor/Destructor
         public ContextMenuContainer()
         {
+        }
+        #endregion
+
+#region Protected Functions
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    if (e.NewItems == null)
+                        throw new ArgumentNullException(nameof(e.NewItems));
+                    foreach (var item in e.NewItems)
+                        ((ContextMenuItem)item).Owner = this;
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    if (e.OldItems == null)
+                        throw new ArgumentNullException(nameof(e.OldItems));
+                    foreach (var item in e.OldItems)
+                        ((ContextMenuItem)item).Owner = null;
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    if (e.OldItems == null)
+                        throw new ArgumentNullException(nameof(e.OldItems));
+                    foreach (var item in e.OldItems)
+                        ((ContextMenuItem)item).Owner = null;
+                    if (e.NewItems == null)
+                        throw new ArgumentNullException(nameof(e.NewItems));
+                    foreach (var item in e.NewItems)
+                        ((ContextMenuItem)item).Owner = this;
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    break;
+            }
+
+            base.OnCollectionChanged(e);
         }
 #endregion
     }

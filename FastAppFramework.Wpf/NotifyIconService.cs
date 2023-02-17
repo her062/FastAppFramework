@@ -61,6 +61,7 @@ namespace FastAppFramework.Wpf
             {
                 this._data.ContextMenu.ItemsSource = container;
                 this._data.ContextMenu.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(ContextMenuItem.Order), System.ComponentModel.ListSortDirection.Ascending));
+                this._data.ContextMenu.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(ContextMenuItem.Index), System.ComponentModel.ListSortDirection.Ascending));
             }
 
             // Setup Commands.
