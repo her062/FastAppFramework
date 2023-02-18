@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using FastAppFramework.Wpf;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using FastAppFramework.Core;
+using System.Reactive.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace FastAppFramework.Demo
 {
@@ -30,6 +33,17 @@ namespace FastAppFramework.Demo
         }
 #endregion
 
+#region Properties
+        public ReadOnlyReactivePropertySlim<DemoSettings?> Settings
+        {
+            get; private set;
+        }
+        public ReadOnlyReactivePropertySlim<string?> Nonvolatile
+        {
+            get; private set;
+        }
+#endregion
+
 #region Fields
         private IMetroDialogService _dialogService;
 #endregion
@@ -40,6 +54,12 @@ namespace FastAppFramework.Demo
             // Setup Fields.
             {
                 this._dialogService = dialogService;
+            }
+
+            // Setup Properties.
+            {
+                this.Settings = FastWpfApplication.Current.Settings.Observe<DemoSettings>("demo").ToReadOnlyReactivePropertySlim().AddTo(this);
+                this.Nonvolatile = this.Settings.ObserveProperty(o => o.Value!.Nonvolatile).ToReadOnlyReactivePropertySlim().AddTo(this);
             }
 
             // Setup Commands.
@@ -74,6 +94,13 @@ namespace FastAppFramework.Demo
                         });
                         await response.CloseAsync();
                     }).AddTo(this);
+            }
+
+            // Subscribes.
+            {
+                this.Nonvolatile.Subscribe(v => {
+                    FastWpfApplication.Current.Logger.LogInformation($"Nonvolatile value is changed: {v}");
+                }).AddTo(this);
             }
         }
 #endregion
