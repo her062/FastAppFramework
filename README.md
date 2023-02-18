@@ -1,19 +1,14 @@
-TODO: Not translated in English, yet.
-
 # FastAppFramework
 Framework for early launch of WPF GUI applications for your projects
 
 ## Background
-I developed some GUI applications using WPF.
-In these development, I always spent a lot of time to consider the basic screen structures and navigation mechanism for my applications.
+In the development of GUI applications using WPF, I always spent a lot of time to consider the basic screen structures and navigation mechanism for my applications.
 Of course, I understand very good libraries for WPF GUI applications are available such as [Prism](https://github.com/PrismLibrary/Prism), [ReactiveProperty](https://github.com/runceel/ReactiveProperty), [Material Design In XML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit), and so on.
 However, I need to integrate these libraries to struct my application.
 
-WPFによるGUIアプリケーション開発では、設定の読み込みや保存、ログの記録、画面遷移の仕組みといったベースメカニズムの構築や、画面構成の検討に多くの時間を費やさなくてはならない。
-Prism/ReactiveProperty/MaterialDesignInXMLToolkitのように数多くの優れたライブラリがあるが、これらのライブラリで提供される個々の強力で独立的な機能は、アプリケーション側で統合しなければ十分に活用することが出来ない。
-
 ## Purpose
-`FastAppFramework` は、アプリケーション開発におけるベースメカニズムの構築、統一的な画面構成の検討を省略し、アプリケーションの本来の目的であるビジネスモデルの構築にいち早く取り掛かるためのフレームワークを提供する事を目的としている。
+The purpose of `FastAppFramework` is providing the framework to simplify building base mechanisms in GUI application development.  
+By using this framework, you can reap the benefits of being able to start developing your application's business model more faster.
 
 ## Getting Started
 ### Quick Start
@@ -102,24 +97,23 @@ PreferenceFrame --> PreferenceRegion
 
 ## Features
 ### View Navigation
-画面遷移には、[Prismが提供する仕組み](https://prismlibrary.com/docs/wpf/region-navigation/index.html)をベースメカニズムとして利用する。
+In this framework, we use [Navigation Using the Prism Library](https://prismlibrary.com/docs/wpf/region-navigation/index.html) as the base mechanism.
 
 #### Root Page Navigation
 The default Root Page is `Main Frame`.
 This means the user will look at any main content first when he/she boot you application.  
 However in some times, you want to display another view at startup.
-For example, the user should input some information follow the wizard before starting main procedures at first boot.
-
-`App.xaml` 内で `faf:ApplicationConfiguration.RootPage` を指定することで初期画面を変更出来る。  
-例えば下記の場合、`FirstWizardPage` が初期画面として表示されるようになる。
+For example, the user should input some information follow the wizard before starting main procedures at first boot.  
+You can change the startup view if you set `faf:ApplicationConfiguration.RootPage` in `App.xaml`.  
+For example in the following code, `FirstWizardPage` will be shown as the startup view.
 ```xml
 <faf:ApplicationConfiguration RootPage="FirstWizardPage" />
 ```
 
 #### Main Contents Navigation
-メインコンテンツの遷移には `Menu Navigation`, `Manual Navigation` の2つの方法がある。
-どちらの方法でも、`App.xaml.cs` 内の `RegisterNavigationTypes` で、クラス型をナビゲーションの対象として登録する必要がある。  
-例えば下記の場合、`MainPage`がナビゲーションの対象として登録される。
+`Menu Navigation` and `Manual Navigation` are provided as the method for main contents navigation.  
+First in either way, you need to register your class types as the target of navigation using `RegisterNavigationTypes` function in `App.xaml.cs`.  
+For example in the following code, `MainPage` will be registered as the navigation target.
 ```csharp
 protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
 {
@@ -128,10 +122,13 @@ protected override void RegisterNavigationTypes(IContainerRegistry containerRegi
 }
 ```
 
-ここで、`MainPage` が `NavigationPage` を継承している場合には、該当のページが表示された時に `NavigationPage.Title` に設定された内容が `Main Frame` のアプリケーションバーに表示されるようになる。
+If `MainPage` is a sub class of `NavigationPage`, the text set in `MainPage.Title` will be displayed in the top application bar in `Main Frame` when `MainPage` appears.
 
 ##### Menu Navigation
-下記のように `NavigationPage` 属性を付与することで、メインメニューに `Main` という項目が表示され、画面遷移できるようになる。
+If you give `NavigationPage` attribute to your view class as the following code, `Main` will be added in the main menu and you can navigate to this view.  
+**Note**
+The key point of `NavigationPageAttribute` is `Region` property.
+You need to set `RegionType.Main` for the view of a main content.
 ```csharp
 using FastAppFramework.Wpf;
 
@@ -141,7 +138,7 @@ public partial class MainPage : NavigationPage
 }
 ```
 
-また、`MaterialDesignPageIcon` 属性を付与することで、メニュー内にアイコンが表示されるようになる。
+In addition, `Home` icon will be shown in the main menu if you give `MaterialDesignPageIcon` attribute as the following code.
 ```csharp
 using FastAppFramework.Wpf;
 
@@ -152,29 +149,36 @@ public partial class MainPage : NavigationPage
 ```
 
 ##### Manual Navigation
-下記のような処理を実行することで、`Main Frame` で `MainPage` が表示されるように画面遷移される。
+You can navigate to any view by calling `IRegions.RequestNavigate` function.  
+For example in the following code, `MainPage` will appears in `Main Frame`.
 ```csharp
 var regionManager = FastWpfApplication.Current.Container.Resolve<IRegionManager>();
 regionManager.Regions[FastWpfApplication.MainRegionName].RequestNavigate("MainPage");
 ```
 
 #### Home Page Navigation
-`App.xaml` 内で `faf:ApplicationConfiguration.HomePage` を指定することで、ホーム画面を設定出来る。  
-ホーム画面を設定する事で、タイトルバーのホームボタンをクリックすることでいつでもホーム画面を表示出来るようになる。
+You can set a view as the home page if you set `faf:ApplicationConfiguration.HomePage` in `App.xaml` as the following code.
+If you set it, you can quickly navigate to this view by clicking `Home` button in the application title bar.
 ```xml
 <faf:ApplicationConfiguration HomePage="MainPage" />
 ```
 
-また、下記のように設定することで、アプリケーションの動作中にホーム画面を変更できる。
+The home page can change dynamically as the following code.
 ```csharp
 FastWpfApplication.Current.Settings.SetValue(FastWpfApplication.HomePageSetting, "OtherPage");
 ```
 
 #### Preference Editors Navigation
-設定エディタも、メインコンテンツと同様に `Menu Navigation`, `Manual Navigation` の2つの方法があり、クラス型をナビゲーションの対象として登録する方法はメインコンテンツと同一である。
+`Menu Navigation` and `Manual Navigation` are provided as the method for preference editors navigation.
+It is same as [Main Contents Navigation](#Main-Contents-Navigation) how to register views as the navigation target.
 
 ##### Menu Navigation
-下記のように `NavigationPage` 属性を付与することで、設定メニューに `General` という項目が表示され、画面遷移できるようになる。
+If you give `NavigationPage` attribute to your view class as the following code, `General` will be added in the preference menu and you can navigate to this view.  
+**Note**
+The key point of `NavigationPageAttribute` is `Region` property.
+You need to set `RegionType.Preference` for the view of a preference.
+
+In addition, if your view class is a sub class of `PreferencePage`, this framework able to track property changes and validation errors in its view.
 ```csharp
 using FastAppFramework.Wpf;
 
@@ -184,57 +188,65 @@ public partial class GeneralPreferencePage : PreferencePage
 }
 ```
 
-ここで、`GeneralPreferencePage` が `PreferencePage` を継承している場合には、該当ページ内の変更やエラーの有無を追跡できるようになる。
-
 ##### Manual Navigation
-下記のような処理を実行することで、`Preference Frame` で `GeneralPreferencePage` が表示されるように画面遷移される。
+You can navigate to any view by calling `IRegions.RequestNavigate` function.  
+For example in the following code, `GeneralPreferencePage` will appears in `Preference Frame`.
 ```csharp
 var regionManager = FastWpfApplication.Current.Container.Resolve<IRegionManager>();
 regionManager.Regions[FastWpfApplication.PreferenceRegionName].RequestNavigate("GeneralPreferencePage");
 ```
 
 ### Application Settings
-アプリケーション設定は `%AppData%\<Application Assembly Name>\app.settings` にjson形式で保存される。
-ファイルに保存されている設定は、アプリケーション起動時に自動的に読み込まれる。  
-下記のような処理を実行することで、プロジェクト内の任意のソースコードからアプリケーション設定を参照・変更することが出来る。
+Application settings are stored in `%AppData%\<Application Assembly Name>\app.settings` as a json file and these are loaded when the application startup.  
+For example in the following code, you can refer or change the value of an application setting.
 ```csharp
 // Get the value of Home Page.
 var homePage = FastWpfApplication.Current.Settings.GetValue<string>(FastWpfApplication.HomePageSetting);
+// Set the value of Home Page.
+FastWpfApplication.Current.Settings.SetValue(FastWpfApplication.HomePageSetting, "OtherPage")
 ```
 
 #### Register Custom Settings
-アプリケーション独自の設定を定義するためには、`App.xaml.cs` 内の `RegisterSettingTypes` に処理を追加する必要がある。
+You can register your own settings in application settings by adding a statement into `RegisterSettingTypes` in `App.xaml.cs`.
 
 ##### Non-volatile settings
-下記のような処理を追加することで、不揮発性の設定を追加することが出来る。
+You can add a non-volatile setting by the statement like as the following code.
 ```csharp
 // Register a string type non-volatile setting as 'test'(Default: <empty>).
 settingRegistry.Register<string>("test", string.Empty);
 ```
 
-また、独自のクラス型を追加することも出来る。
-ただし、不揮発性の設定は、`Newtonsoft.Json` でシリアライズ・デシリアライズ出来る必要がある。
+You can add your own classes in application settings.
+You need to implement these classes as able to serialize/deserialize by `Newtonsoft.Json`.
 ```csharp
 // Register a CustomSettings type non-volatile setting.
 settingRegistry.Register<CustomSettings>();
 ```
 
 ##### Volatile settings
-ここまでの説明で使用した `FastWpfApplication.HomePageSetting('home')` が `app.settings` に保存されていない事に気づいたと思う。  
-これは、該当項目が揮発性の設定として定義されているためである。
-揮発性の設定は、シリアライズの対象から除外され、設定ファイルに保存されない。  
-下記のように定義することで、揮発性の設定を追加することが出来る。
+You may notice `FastWpfApplication.HomePageSetting(='home')` is not stored in `app.settings` if you read this file.
+This reason is this setting is defined as a volatile.  
+You can add any settings as volatile by the statement like as the following code.
 ```csharp
 // Register a string type volatile setting as 'test'(Default: <empty>).
 settingRegistry.Register<string>("test", string.Empty, Variability.Volatile);
 ```
 
 ##### Immutable settings
-TODO: Not described, yet.
+You can add any settings as immutable by the statement like as the following code.
+You cannot change the value of the immutable setting after registration and it will be stored in the application settings file.
+This means the value at first implementation timing will be kept.  
+If you set `Volatile` together, this is same as `static readonly` or `const` variables.
+```csharp
+// Register a date time of first startup application.
+setting.Registry.Register<string>("startDate", DateTimeOffset.Now.ToString("yyyy-MM-dd'T'HH:mm:sszzz"), Variability.Immutable);
+// Register immutable volatile setting.
+setting.Registry.Register<string>("constName", "Sample Application", Variability.Immutable | Variability.Volatile);
+```
 
 #### Dependency Injection
-`IApplicationSettingRegistry` で登録された設定は、`Prism`の DI Container にも自動的に登録される。
-そのため、ViewModel型のコンストラクタ引数に追加されている場合には、自動的に型解決され、適切なインスタンスが渡される。
+Settings registered in `IApplicationSettingRegistry` are also registered in DI Container on `Prism`.
+Therefore, The suitable instance of setting class type will be passed into the class that registered in DI Container if this constructor arguments has any setting class type.
 ```csharp
 public class CustomSettingViewModel : CloneableModelBindingBase
 {
@@ -247,32 +259,45 @@ public class CustomSettingViewModel : CloneableModelBindingBase
 }
 ```
 
-また、下記のような処理を実行することで、インスタンスを取得することも出来る。
+You can refer the instance of setting class type by the following code.
 ```csharp
 var obj = FastWpfApplication.Current.Container.Resolve<CustomSettings>();
 ```
 
-ただし、アプリケーション設定が再読み込みされた場合や、デフォルト値に戻された場合などには、上記の方法で取得したオブジェクトのインスタンスは無効になってしまう。
-前述の [Preference Editors Navigation](#Preference-Editors-Navigation) で表示される設定エディタは上記の操作をした場合は再読み込みされるため、特別な処理をする必要はない。
-その他の振る舞いでアプリケーション設定を参照する場合は、下記のような処理にすることで、インスタンスの変化を検出することが出来るようになる。
+However, the instance of setting class type will be changed if application settings are reloaded or restored as default.  
+You don't need to worry for each classes for [Preference Editors Navigation](#Preference-Editors-Navigation) because these instances will be reloaded after above operations.  
+If you refer any instance of application settings for other behaviors, I suggest you the following code as a solution.
 ```csharp
+// Refer the instance of a setting as a ReactiveProperty, and detect changes instance.
 var setting = FastWpfApplication.Current.Settings.Observe<CustomSettings>(o => o.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
+// Refer the property in a setting as a ReactiveProperty.
 var property1 = setting.ObserveProperty(v => v.Value!.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
 ```
 
 #### Version Controls
-TODO: Not described, yet.
+If you give `ApplicationSetting` attribute as the following code, you can set the schema version of this setting.
+```csharp
+[ApplicationSetting(Version = "1.0")]
+public class CustomSettings : CloneableModelBase
+{
+    ...
+}
+```
+
+This schema version will be stored in the application settings file.  
+If you change the major version on this attribute, values in the application settings file will be ignored.
+I hope you can reap the benefits by this control if you have any breaking changes relate to this setting.
 
 ### Logging
-本フレームワークでは [Microsoft.Extensions.Logging.ILogger](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-7.0) を使用してロギングを行う。
-`Microsoft.Extensions.Logging.ILogger` を使用するための最も単純な方法は、下記のように `App` クラスのプロパティを参照する方法である。
+In this framework, we use [Microsoft.Extensions.Logging.ILogger](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-7.0) for logging.
+If you want to record any log, the following code is simplest way to get the instance of `Microsoft.Extensions.Logging.ILogger`.
 ```csharp
-// Case 1: Get ILogger from Application Instance.
+// Get ILogger from Application Instance and record an information log.
 App.Current.Logger.LogInformation("Logging Sample");
 ```
 
-また、`ILogger` は、`Prism`の DI Container にも登録される。
-そのため、下記のように DI Container に登録されているその他のクラスでコンストラクタ引数に定義されている場合もインスタンスを取得できる。
+In addition, `ILogger` instance is registered in DI Container on `Prism`.
+So, you can also get it in the constructor of classes registered in there.
 ```csharp
 public class CustomSettingViewModel : CloneableModelBindingBase
 {
@@ -287,8 +312,8 @@ public class CustomSettingViewModel : CloneableModelBindingBase
 ```
 
 #### Logging Output Destination
-デフォルトでは、`Information` 以上の重大度レベルのログは `%USERPROFILE%\AppData\Local\Temp\<Application Assembly Name>\logs\<yyyyMMdd>.log` に保存される。
-また、全ての重大度レベルのログはコンソールに出力される。
+In the default, the log will be stored in `%USERPROFILE%\AppData\Local\Temp\<Application Assembly Name>\logs\<yyyyMMdd>.log` if the severity level is greater or equals `Information`.
+Also, all log will be output in the console.
 
 | Level | Logging Method | Output to File | Output to Console |
 |:-----:|:---------------|:----:|:-------:|
@@ -301,8 +326,8 @@ public class CustomSettingViewModel : CloneableModelBindingBase
 
 #### Customize Logging Configuration
 ##### Change File Path
-ログファイルの保存先は `IApplicationEnvironment.LogFolder` で定義されている。
-下記関数をオーバーライドして `IApplicationEnvironment` を継承したカスタムクラスのインスタンスを返すようにすることで、ファイルの保存先を変更出来る。
+The path of application log file is defined as `IApplicationEnvironment.LogFolder`.
+You can change this path if you create a custom class realizing `IApplicationEnvironment` and overwrite the following function.
 ```csharp
 public partial class App : FastWpfApplication
 {
@@ -314,8 +339,8 @@ public partial class App : FastWpfApplication
 ```
 
 ##### Change ILogger
-デフォルトの `ILogger` は `FastApplication.CreateLogger` で生成されている。
-下記関数をオーバーライドして `ILogger` を継承したカスタムクラスのインスタンスを返すようにすることで、ログの書式や出力先などを自由に変更出来る。
+`ILogger` instance is created in `FastApplication.CreateLogger`.
+You can change the text format, output destination, and so on if you overwrite this function to return your own defined instance.
 ```csharp
 public partial class App : FastWpfApplication
 {
