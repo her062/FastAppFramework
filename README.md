@@ -7,7 +7,7 @@ Framework for early launch of WPF GUI applications for your projects
 I developed some GUI applications using WPF.
 In these development, I always spent a lot of time to consider the basic screen structures and navigation mechanism for my applications.
 Of course, I understand very good libraries for WPF GUI applications are available such as [Prism](https://github.com/PrismLibrary/Prism), [ReactiveProperty](https://github.com/runceel/ReactiveProperty), [Material Design In XML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit), and so on.
-However, I need to integrate these libraries to fit my application requirements.
+However, I need to integrate these libraries to struct my application.
 
 WPFによるGUIアプリケーション開発では、設定の読み込みや保存、ログの記録、画面遷移の仕組みといったベースメカニズムの構築や、画面構成の検討に多くの時間を費やさなくてはならない。
 Prism/ReactiveProperty/MaterialDesignInXMLToolkitのように数多くの優れたライブラリがあるが、これらのライブラリで提供される個々の強力で独立的な機能は、アプリケーション側で統合しなければ十分に活用することが出来ない。
@@ -97,8 +97,8 @@ PreferenceFrame --> PreferenceRegion
 #### Embedded Views
 | Name | Description |
 |:----:|:------------|
-| Main Frame | An view displayed into Root Region. <br> This view has `Main Region` to navigate user defined main contents. |
-| Preference Frame | An view displayed into Root Region. <br> This view has `Preference Region` to navigate user defined preference editor views. |
+| Main Frame | A view displayed into Root Region. <br> This view has `Main Region` to navigate user defined main contents. |
+| Preference Frame | A view displayed into Root Region. <br> This view has `Preference Region` to navigate user defined preference editor views. |
 
 ## Features
 ### View Navigation
@@ -235,16 +235,96 @@ TODO: Not described, yet.
 #### Dependency Injection
 `IApplicationSettingRegistry` で登録された設定は、`Prism`の DI Container にも自動的に登録される。
 そのため、ViewModel型のコンストラクタ引数に追加されている場合には、自動的に型解決され、適切なインスタンスが渡される。
+```csharp
+public class CustomSettingViewModel : CloneableModelBindingBase
+{
+    // The instance of CustomSettings will be automatically resolved by DI Container.
+    public CustomSettingViewModel(CustomSettings model) : base(model)
+    {
+        ...
+    }
+    ...
+}
+```
+
 また、下記のような処理を実行することで、インスタンスを取得することも出来る。
 ```csharp
 var obj = FastWpfApplication.Current.Container.Resolve<CustomSettings>();
+```
+
+ただし、アプリケーション設定が再読み込みされた場合や、デフォルト値に戻された場合などには、上記の方法で取得したオブジェクトのインスタンスは無効になってしまう。
+前述の [Preference Editors Navigation](#Preference-Editors-Navigation) で表示される設定エディタは上記の操作をした場合は再読み込みされるため、特別な処理をする必要はない。
+その他の振る舞いでアプリケーション設定を参照する場合は、下記のような処理にすることで、インスタンスの変化を検出することが出来るようになる。
+```csharp
+var setting = FastWpfApplication.Current.Settings.Observe<CustomSettings>(o => o.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
+var property1 = setting.ObserveProperty(v => v.Value!.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
 ```
 
 #### Version Controls
 TODO: Not described, yet.
 
 ### Logging
-TODO: Not described, yet.
+本フレームワークでは [Microsoft.Extensions.Logging.ILogger](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-7.0) を使用してロギングを行う。
+`Microsoft.Extensions.Logging.ILogger` を使用するための最も単純な方法は、下記のように `App` クラスのプロパティを参照する方法である。
+```csharp
+// Case 1: Get ILogger from Application Instance.
+App.Current.Logger.LogInformation("Logging Sample");
+```
+
+また、`ILogger` は、`Prism`の DI Container にも登録される。
+そのため、下記のように DI Container に登録されているその他のクラスでコンストラクタ引数に定義されている場合もインスタンスを取得できる。
+```csharp
+public class CustomSettingViewModel : CloneableModelBindingBase
+{
+    // The instance of CustomSettings will be automatically resolved by DI Container.
+    public CustomSettingViewModel(CustomSettings model, ILogger logger) : base(model)
+    {
+        logger.LogInformation("Logging Sample");
+        ...
+    }
+    ...
+}
+```
+
+#### Logging Output Destination
+デフォルトでは、`Information` 以上の重大度レベルのログは `%USERPROFILE%\AppData\Local\Temp\<Application Assembly Name>\logs\<yyyyMMdd>.log` に保存される。
+また、全ての重大度レベルのログはコンソールに出力される。
+
+| Level | Logging Method | Output to File | Output to Console |
+|:-----:|:---------------|:----:|:-------:|
+| Trace | LogTrace | :x: | :white_check_mark: |
+| Debug | LogDebug | :x: | :white_check_mark: |
+| Information | LogInformation | :white_check_mark: | :white_check_mark: |
+| Warning | LogWarning | :white_check_mark: | :white_check_mark: |
+| Error | LogError | :white_check_mark: | :white_check_mark: |
+| Critical | LogCritical | :white_check_mark: | :white_check_mark: |
+
+#### Customize Logging Configuration
+##### Change File Path
+ログファイルの保存先は `IApplicationEnvironment.LogFolder` で定義されている。
+下記関数をオーバーライドして `IApplicationEnvironment` を継承したカスタムクラスのインスタンスを返すようにすることで、ファイルの保存先を変更出来る。
+```csharp
+public partial class App : FastWpfApplication
+{
+    protected override IApplicationEnvironment SetupEnvironment()
+    {
+        ...
+    }
+}
+```
+
+##### Change ILogger
+デフォルトの `ILogger` は `FastApplication.CreateLogger` で生成されている。
+下記関数をオーバーライドして `ILogger` を継承したカスタムクラスのインスタンスを返すようにすることで、ログの書式や出力先などを自由に変更出来る。
+```csharp
+public partial class App : FastWpfApplication
+{
+    protected override ILogger CreateLogger()
+    {
+        ...
+    }
+}
+```
 
 ## Dependencies
 ### FastAppFramework.Core
@@ -258,3 +338,4 @@ TODO: Not described, yet.
 * [ReactiveProperty](https://www.nuget.org/packages/ReactiveProperty)
 * [MaterialDesignThemes.MahApps](https://www.nuget.org/packages/MaterialDesignThemes.MahApps)
 * [MahApps.Metro](https://www.nuget.org/packages/MahApps.Metro)
+* [Hardcodet.NotifyIcon.Wpf](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf)
