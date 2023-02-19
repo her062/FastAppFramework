@@ -115,10 +115,15 @@ For example in the following code, `FirstWizardPage` will be shown as the startu
 First in either way, you need to register your class types as the target of navigation using `RegisterNavigationTypes` function in `App.xaml.cs`.  
 For example in the following code, `MainPage` will be registered as the navigation target.
 ```csharp
-protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
+public partial class App : FastWpfApplication
 {
-    base.RegisterNavigationTypes(containerRegistry);
-    containerRegistry.RegisterForNavigation<MainPage>();
+    ...
+    protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
+    {
+        base.RegisterNavigationTypes(containerRegistry);
+        containerRegistry.RegisterForNavigation<MainPage>();
+    }
+    ...
 }
 ```
 
@@ -126,9 +131,8 @@ If `MainPage` is a sub class of `NavigationPage`, the text set in `MainPage.Titl
 
 ##### Menu Navigation
 If you give `NavigationPage` attribute to your view class as the following code, `Main` will be added in the main menu and you can navigate to this view.  
-**Note**
-The key point of `NavigationPageAttribute` is `Region` property.
-You need to set `RegionType.Main` for the view of a main content.
+> **Note**
+> You need to set `RegionType.Main` to `Region` property for the view of a main content.
 ```csharp
 using FastAppFramework.Wpf;
 
@@ -174,9 +178,8 @@ It is same as [Main Contents Navigation](#Main-Contents-Navigation) how to regis
 
 ##### Menu Navigation
 If you give `NavigationPage` attribute to your view class as the following code, `General` will be added in the preference menu and you can navigate to this view.  
-**Note**
-The key point of `NavigationPageAttribute` is `Region` property.
-You need to set `RegionType.Preference` for the view of a preference.
+> **Note**
+> You need to set `RegionType.Preference` to `Region` property for the view of a preference.
 
 In addition, if your view class is a sub class of `PreferencePage`, this framework able to track property changes and validation errors in its view.
 ```csharp
@@ -194,6 +197,99 @@ For example in the following code, `GeneralPreferencePage` will appears in `Pref
 ```csharp
 var regionManager = FastWpfApplication.Current.Container.Resolve<IRegionManager>();
 regionManager.Regions[FastWpfApplication.PreferenceRegionName].RequestNavigate("GeneralPreferencePage");
+```
+
+### Dialogs
+This framework recommend to use dialogs implemented in `MahApps.Metro`.
+An instance of `IMetroDialogService` is registered in DI Container and you can use it by the following code.
+```csharp
+var service = FastWpfApplication.Current.Container.Resolve<IMetroDialogService>();
+// Show message dialog.
+var res = await service.ShowMessageAsync("Message", "This is message dialog", MessageDialogStyle.AffirmativeAndNegative);
+// Show input dialog.
+var input = await service.ShowInputAsync("Input", "Please input any");
+```
+
+#### Application Exit Confirmation
+In sometimes, you may want to confirm really okay to quit application if the user performs an action to quit the application(For example, Push `Close` button of the window).
+The confirmation message dialog will be shown if you set `True` to `faf:ApplicationConfiguration.ExitConfirmation` in `App.xaml`.
+And quiting the application process will be canceled if the user's answer is negative.
+```xml
+<faf:ApplicationConfiguration ExitConfirmation="True" />
+```
+
+In addition, you can change the behavior this confirmation procedures by overriding `Exiting` in `App.xaml.cs`
+```csharp
+public partial class App : FastWpfApplication
+{
+    ...
+        public override async Task<bool> Exiting()
+        {
+            ...
+        }
+    ...
+```
+
+### Notify Icon
+The notify icon will be added in the notification area if you set `True` to `faf:ApplicationConfiguration.HasNotifyIcon` in `App.xaml`.
+An instance of `INotifyIconService` will be registered in DI Container and you can get it by the following code.
+```xml
+<faf:ApplicationConfiguration HasNotifyIcon="True" />
+```
+```csharp
+var service = FastWpfApplication.Current.Container.Resolve<INotifyIconService>();
+```
+
+If your application has the notify icon, it won't quit even if you close the window.
+Instead of, you can quit it by calling `Shutdown` function as the following code.
+```csharp
+// Quit the application.
+Application.Current.Shutdown();
+```
+
+#### Icon in the notification area
+In the default, the icon associated to your application executable file is shown in the notification area.
+If you set `Icon` property of `INotifyIconService` as the following code, you can use any icon for the notify icon.
+```csharp
+var service = FastWpfApplication.Current.Container.Resolve<INotifyIconService>();
+// Load the icon from file.
+service.Icon = new Icon("C:\\temp.ico");
+// Load the icon from embedded resource.
+service.Icon = new Icon(Assembly.GetEntryAssembly().GetManifestResourceStream("notifyicon"));
+```
+
+#### ToolTip
+In the default, the tooltip when the cursor hover on the notify icon is same as the title of window.
+If you set `ToolTip` property of `INotifyIconService` as the following code, you can change the tooltip.
+```csharp
+var service = FastWpfApplication.Current.Container.Resolve<INotifyIconService>();
+service.ToolTip = "Notify Icon ToolTip";
+```
+
+#### Double Click Command
+In the default, the window will be shown & activated if you double click the notify icon.
+If you set `DoubleClickCommand` property of `INotifyIconService` as the following code, you can change the behavior of the notify icon double clicking.
+```csharp
+var service = FastWpfApplication.Current.Container.Resolve<INotifyIconService>();
+service.DoubleClickCommand = new ReactiveCommand().WithSubscribe(() => { MessageBox.Show("Notify Icon is double clicked"); });
+```
+
+#### Context Menu
+Items on the context menu for the notify icon is constructed by `ContextMenuContainer`.
+If you override `RegisterNotifyIconContextMenuItems` as the following code, you can add any items to the context menu.
+> **Warning**
+> Note that `Exit` won't be added to the context menu if you don't call `base.RegisterNotifyIconContextMenuItems(container)`.
+```csharp
+public partial class App : FastWpfApplication
+{
+    ...
+    protected override void RegisterNotifyIconContextMenuItems(ContextMenuContainer container)
+    {
+        base.RegisterNotifyIconContextMenuItems(container);
+        container.Add("Item 1", new ReactiveCommand().WithSubscribe(() => { MessageBox.Show("'Item 1' is clicked!"); }));
+    }
+    ...
+}
 ```
 
 ### Application Settings
@@ -311,7 +407,7 @@ public class CustomSettingViewModel : CloneableModelBindingBase
 }
 ```
 
-#### Logging Output Destination
+#### Output Destination
 In the default, the log will be stored in `%USERPROFILE%\AppData\Local\Temp\<Application Assembly Name>\logs\<yyyyMMdd>.log` if the severity level is greater or equals `Information`.
 Also, all log will be output in the console.
 
@@ -324,7 +420,7 @@ Also, all log will be output in the console.
 | Error | LogError | :white_check_mark: | :white_check_mark: |
 | Critical | LogCritical | :white_check_mark: | :white_check_mark: |
 
-#### Customize Logging Configuration
+#### Customize Configuration
 ##### Change File Path
 The path of application log file is defined as `IApplicationEnvironment.LogFolder`.
 You can change this path if you create a custom class realizing `IApplicationEnvironment` and overwrite the following function.
