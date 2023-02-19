@@ -19,16 +19,24 @@ namespace FastAppFramework.Wpf
         private const string PART_ContextMenu = "PART_ContextMenu";
 #endregion
 
+#region Commands
+        public ICommand? DoubleClickCommand
+        {
+            get => this._data.DoubleClickCommand;
+            set => this._data.DoubleClickCommand = value;
+        }
+#endregion
+
 #region Properties
         public string? ToolTip
         {
             get => (string?)this._tooltip.Content;
             set => this._tooltip.Content = value;
         }
-        public ICommand? DoubleClickCommand
+        public System.Drawing.Icon Icon
         {
-            get => this._data.DoubleClickCommand;
-            set => this._data.DoubleClickCommand = value;
+            get => this._data.Icon;
+            set => this._data.Icon = value;
         }
 #endregion
 
