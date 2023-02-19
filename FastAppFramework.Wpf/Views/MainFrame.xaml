@@ -1,0 +1,50 @@
+<UserControl x:Class="FastAppFramework.Wpf.Views.MainFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf.Views"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="NavigationItemsSource" Source="{Binding NavigationItems}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <md:DrawerHost IsLeftDrawerOpen="{Binding ShowNavigationDrawer.Value}">
+        <md:DrawerHost.LeftDrawerContent>
+            <faf:SideNavigationBar Margin="0 12" MinWidth="360" ItemsSource="{Binding Source={StaticResource NavigationItemsSource}}" SelectedItem="{Binding SelectedNavigationItem.Value}" />
+        </md:DrawerHost.LeftDrawerContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Top app bar -->
+            <faf:TopAppBar Grid.Row="0"
+                LeadingNavigation="Menu"
+                IsShowingNavigation="{Binding IsLeftDrawerOpen, RelativeSource={RelativeSource AncestorType={x:Type md:DrawerHost}}, Mode=TwoWay}"
+                Headline="{Binding Headline.Value}">
+                <faf:TopAppBar.Style>
+                    <Style TargetType="{x:Type faf:TopAppBar}" BasedOn="{StaticResource {x:Type faf:TopAppBar}}">
+                        <Setter Property="LeadingNavigation" Value="None" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasNavigationPages.Value}" Value="True">
+                                <Setter Property="LeadingNavigation" Value="Menu" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </faf:TopAppBar.Style>
+            </faf:TopAppBar>
+
+            <!-- Main Region -->
+            <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.MainRegionName}" />
+        </Grid>
+    </md:DrawerHost>
+</UserControl>

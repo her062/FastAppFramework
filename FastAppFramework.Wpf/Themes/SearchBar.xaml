@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- SearchBar Template -->
+    <ControlTemplate x:Key="SearchBarTemplate" TargetType="{x:Type local:SearchBar}">
+        <md:ColorZone Padding="16 8"
+            CornerRadius="{TemplateBinding CornerRadius}"
+            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <md:PackIcon Grid.Column="0"
+                    Width="20" Height="20"
+                    VerticalAlignment="Center"
+                    Kind="Search" Opacity=".56" />
+
+                <TextBox Grid.Column="1"
+                    Margin="8 0 0 0"
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    VerticalAlignment="Center"
+                    md:HintAssist.Hint="{TemplateBinding Hint}"
+                    md:TextFieldAssist.DecorationVisibility="Hidden"
+                    md:TextFieldAssist.HasClearButton="{TemplateBinding HasClearButton}"
+                    BorderThickness="0"
+                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+        </md:ColorZone>
+    </ControlTemplate>
+
+    <Style x:Key="FastAppFramework.Wpf.SearchBar" TargetType="{x:Type local:SearchBar}">
+        <Setter Property="Template" Value="{StaticResource SearchBarTemplate}" />
+    </Style>
+</ResourceDictionary>

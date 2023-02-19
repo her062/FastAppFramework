@@ -1,0 +1,100 @@
+<UserControl x:Class="FastAppFramework.Wpf.Views.PreferenceFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf.Views"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="NavigationItemsSource" Source="{Binding NavigationItems}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Top app bar -->
+        <faf:TopAppBar Grid.Row="0"
+            LeadingNavigation="Back"
+            Headline="{Binding Headline.Value}"
+            BackCommand="{Binding BackCommand}">
+            <faf:TopAppBar.TrailingIcon>
+                <StackPanel>
+                    <Button
+                        Content="{md:PackIcon Kind=Reload, Size=24}"
+                        ToolTip="Reload Settings"
+                        Command="{Binding ReloadCommand}" />
+                </StackPanel>
+            </faf:TopAppBar.TrailingIcon>
+        </faf:TopAppBar>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- NavigationBar -->
+            <faf:SideNavigationBar Grid.Column="0" Margin="0 12 0 0" MinWidth="240" ItemsSource="{Binding Source={StaticResource NavigationItemsSource}}" SelectedItem="{Binding SelectedNavigationItem.Value}">
+                <faf:SideNavigationBar.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SideNavigationBarItemContainerStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDirty}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource MaterialDesignValidationErrorBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignValidationErrorBrush}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </faf:SideNavigationBar.ItemContainerStyle>
+            </faf:SideNavigationBar>
+            <!-- Preference Region -->
+            <ContentControl Grid.Column="1" Margin="8 0 0 0" prism:RegionManager.RegionName="{x:Static faf:FastWpfApplication.PreferenceRegionName}" />
+        </Grid>
+
+        <!-- Commands -->
+        <Grid Grid.Row="2" Margin="16 8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Commands -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                    Content="Restore Defaults"
+                    Command="{Binding ResetCommand}" />
+            </StackPanel>
+
+            <!-- Right Commands -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Content="Revert"
+                    Command="{Binding RevertCommand}" />
+                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="16 0 0 0"
+                    Content="Apply"
+                    Command="{Binding ApplyCommand}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
