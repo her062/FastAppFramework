@@ -14,12 +14,28 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
+            "label": "pack-core",
             "command": "dotnet",
             "type": "process",
             "args": [
-                "publish",
-                "${workspaceFolder}/FastAppFramework.Demo/FastAppFramework.Demo.csproj",
+                "pack",
+                "${workspaceFolder}/FastAppFramework.Core/FastAppFramework.Core.csproj",
+                "-c",
+                "Release",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "pack-wpf",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "${workspaceFolder}/FastAppFramework.Wpf/FastAppFramework.Wpf.csproj",
+                "-c",
+                "Release",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
