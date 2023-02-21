@@ -19,6 +19,8 @@
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/TopAppBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SideNavigationBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/CustomPopupComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchableComboBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- MahApps Brushes -->
@@ -46,6 +48,8 @@
     <Style TargetType="{x:Type local:TopAppBar}" BasedOn="{StaticResource FastAppFramework.Wpf.TopAppBar}" />
     <Style TargetType="{x:Type local:SearchBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchBar}" />
     <Style TargetType="{x:Type local:SideNavigationBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SideNavigationBar}" />
+    <Style TargetType="{x:Type local:CustomPopupComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.CustomPopupComboBox.Filled}" />
+    <Style TargetType="{x:Type local:SearchableComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchableComboBox.Filled}" />
 
     <!-- Frequently Converters -->
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
