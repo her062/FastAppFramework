@@ -10,6 +10,7 @@
     <!-- SearchBar Template -->
     <ControlTemplate x:Key="SearchBarTemplate" TargetType="{x:Type local:SearchBar}">
         <md:ColorZone Padding="16 8"
+            Focusable="False"
             CornerRadius="{TemplateBinding CornerRadius}"
             Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
             <Grid>
@@ -24,14 +25,24 @@
                     Kind="Search" Opacity=".56" />
 
                 <TextBox Grid.Column="1"
+                    x:Name="PART_TextBox"
                     Margin="8 0 0 0"
-                    Style="{StaticResource MaterialDesignTextBox}"
                     VerticalAlignment="Center"
                     md:HintAssist.Hint="{TemplateBinding Hint}"
                     md:TextFieldAssist.DecorationVisibility="Hidden"
                     md:TextFieldAssist.HasClearButton="{TemplateBinding HasClearButton}"
                     BorderThickness="0"
-                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFocused, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                    <Setter Property="local:KeyboardManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
             </Grid>
         </md:ColorZone>
     </ControlTemplate>

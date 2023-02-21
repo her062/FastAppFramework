@@ -1,0 +1,56 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ComboBox.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- Popup Template -->
+    <ControlTemplate x:Key="CustomPopupComboBoxTemplate" TargetType="{x:Type ContentControl}">
+        <Grid MinWidth="{Binding ContentMinWidth, RelativeSource={RelativeSource AncestorType={x:Type md:ComboBoxPopup}}}"
+            Margin="{Binding ContentMargin, RelativeSource={RelativeSource AncestorType={x:Type md:ComboBoxPopup}}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Background="Transparent"
+                BorderBrush="{DynamicResource MaterialDesignShadowBrush}"
+                BorderThickness="1"
+                CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType={x:Type md:ComboBoxPopup}}}">
+                <Border.Effect>
+                    <BlurEffect Radius="6" />
+                </Border.Effect>
+            </Border>
+            <Border Margin="1"
+                Background="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type md:ComboBoxPopup}}}"
+                CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType={x:Type md:ComboBoxPopup}}}">
+                <Grid SnapsToDevicePixels="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Height="{StaticResource PopupTopBottomMargin}" />
+                    <ContentControl Grid.Row="1" Focusable="False" Template="{Binding PopupHeaderTemplate, RelativeSource={RelativeSource AncestorType={x:Type local:CustomPopupComboBox}}}" />
+                    <ContentPresenter Grid.Row="2" />
+                    <ContentControl Grid.Row="3" Focusable="False" Template="{Binding PopupFooterTemplate, RelativeSource={RelativeSource AncestorType={x:Type local:CustomPopupComboBox}}}" />
+                    <Border Grid.Row="4" Height="{StaticResource PopupTopBottomMargin}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </ControlTemplate>
+
+    <!-- Styles -->
+    <Style x:Key="FastAppFramework.Wpf.CustomPopupComboBox" TargetType="{x:Type local:CustomPopupComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
+        <Setter Property="PopupTemplate" Value="{StaticResource CustomPopupComboBoxTemplate}" />
+    </Style>
+    <Style x:Key="FastAppFramework.Wpf.CustomPopupComboBox.Filled" TargetType="{x:Type local:CustomPopupComboBox}" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
+        <Setter Property="PopupTemplate" Value="{StaticResource CustomPopupComboBoxTemplate}" />
+    </Style>
+    <Style x:Key="FastAppFramework.Wpf.CustomPopupComboBox.Outlined" TargetType="{x:Type local:CustomPopupComboBox}" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+        <Setter Property="PopupTemplate" Value="{StaticResource CustomPopupComboBoxTemplate}" />
+    </Style>
+</ResourceDictionary>
