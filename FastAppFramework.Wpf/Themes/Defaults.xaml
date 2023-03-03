@@ -55,4 +55,5 @@
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
     <converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible" />
+    <converters:ColorToSolidBrushConverter x:Key="ColorToSolidBrushConverter" />
 </ResourceDictionary>

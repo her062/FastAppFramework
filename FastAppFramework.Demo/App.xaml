@@ -1,21 +1,21 @@
 ﻿<faf:FastWpfApplication x:Class="FastAppFramework.Demo.App"
-                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
-                        xmlns:local="clr-namespace:FastAppFramework.Demo">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
+    xmlns:local="clr-namespace:FastAppFramework.Demo">
+
     <faf:FastWpfApplication.Config>
-        <faf:ApplicationConfiguration
-            WindowTitle="Fast Application Framework - Demo"
-            WindowSize="640 480"
-            HomePage="HomePage"
-            HasNotifyIcon="False"
-            ExitConfirmation="False" />
+        <faf:ApplicationConfiguration WindowTitle="Fast App Framework Demo" RootPage="FirstWizardFrame" />
     </faf:FastWpfApplication.Config>
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- FastAppFramework.Wpf -->
                 <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/Defaults.xaml" />
+                <!-- MaterialDesignExtensions -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
