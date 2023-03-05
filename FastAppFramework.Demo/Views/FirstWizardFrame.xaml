@@ -3,12 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:prism="http://prismlibrary.com/"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mdc="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
     xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
-    xmlns:picker="clr-namespace:ColorPicker;assembly=ColorPicker"
     xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
     xmlns:demo="clr-namespace:FastAppFramework.Demo"
     xmlns:local="clr-namespace:FastAppFramework.Demo.Views"
@@ -29,14 +25,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <RichTextBox Grid.Row="0"
-                        Style="{StaticResource MaterialDesignRichTextBox}"
-                        Padding="0"
-                        md:TextFieldAssist.TextBoxViewMargin="8"
-                        BorderThickness="0"
-                        IsReadOnly="True"
-                        VerticalScrollBarVisibility="Auto"
-                        demo:RichTextBoxHelper.Document="{Binding License, Mode=OneWay}" />
+                    <local:LicenseAgreementPage Grid.Row="0" />
                     <md:ColorZone Grid.Row="1" Panel.ZIndex="999" Padding="16 0" md:ElevationAssist.Elevation="Dp4">
                         <mde:StepButtonBar Continue="Accept" Cancel="Decline" />
                     </md:ColorZone>
@@ -50,25 +39,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}"
-                                Margin="16"
-                                TextAlignment="Center"
-                                Text="Welcome to FastAppFramework" />
-                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
-                                Margin="16 8"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap"
-                                Text="Framework for early launch of WPF GUI applications for your projects" />
-
-                            <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
-                                Margin="16"
-                                HorizontalAlignment="Center"
-                                Content="{md:PackIcon Github}"
-                                ToolTip="Visit GitHub"
-                                Command="{Binding OpenInBrowserCommand}"
-                                CommandParameter="https://github.com/her062/FastAppFramework" />
-                        </StackPanel>
+                        <local:OverviewPage />
                     </ScrollViewer>
                     <md:ColorZone Grid.Row="1" Panel.ZIndex="999" Padding="16 0" md:ElevationAssist.Elevation="Dp4">
                         <mde:StepButtonBar Continue="Next" Back="Back" />
@@ -77,264 +48,15 @@
             </DataTemplate>
             <!-- Theme -->
             <DataTemplate DataType="{x:Type vm:ThemePageViewModel}">
-                <Grid x:Name="root">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <!-- Base Theme -->
-                    <md:Card Grid.Row="0" Margin="8 8 8 0" Padding="8">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                                VerticalAlignment="Center"
-                                Text="Base Theme" />
-                            <ListBox Grid.Column="1"
-                                Style="{StaticResource MaterialDesignToolToggleListBox}"
-                                VerticalAlignment="Center"
-                                ItemsSource="{Binding BaseThemes}"
-                                SelectedItem="{Binding BaseTheme.Value, Mode=TwoWay}" />
-                        </Grid>
-                    </md:Card>
-                    <!-- Color -->
-                    <md:Card Grid.Row="1" Margin="8 8 8 8" Padding="8">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <!-- Preview -->
-                            <Grid Grid.Column="0" Margin="16 8">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="Color" />
-                                <ListBox Grid.Row="1" ItemsSource="{Binding ColorSets}" SelectedItem="{Binding SelectedColorSet.Value, Mode=TwoWay}">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="1*" />
-                                                    <RowDefinition Height="1*" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="1*" />
-                                                    <ColumnDefinition Width="1*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="{Binding Key}" />
-                                                <!-- Mid -->
-                                                <md:ColorZone Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                    Padding="8"
-                                                    Mode="Custom"
-                                                    Background="{Binding Value.Mid.Color, Converter={StaticResource ColorToSolidBrushConverter}}"
-                                                    Foreground="{Binding Value.Mid.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}">
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="*" />
-                                                        </Grid.RowDefinitions>
-
-                                                        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignCaptionTextBlock}" Text="{Binding Value.Mid.Color}" />
-                                                        <TextBlock Grid.Row="1" Style="{StaticResource MaterialDesignBody2TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Mid" />
-                                                    </Grid>
-                                                </md:ColorZone>
-                                                <!-- Light -->
-                                                <md:ColorZone Grid.Row="2" Grid.Column="0"
-                                                    Padding="8"
-                                                    Mode="Custom"
-                                                    Background="{Binding Value.Light.Color, Converter={StaticResource ColorToSolidBrushConverter}}"
-                                                    Foreground="{Binding Value.Light.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}">
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="*" />
-                                                        </Grid.RowDefinitions>
-
-                                                        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignCaptionTextBlock}" Text="{Binding Value.Light.Color}" />
-                                                        <TextBlock Grid.Row="1" Style="{StaticResource MaterialDesignBody2TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Light" />
-                                                    </Grid>
-                                                </md:ColorZone>
-                                                <!-- Dark -->
-                                                <md:ColorZone Grid.Row="2" Grid.Column="1" Padding="8"
-                                                    Mode="Custom"
-                                                    Background="{Binding Value.Dark.Color, Converter={StaticResource ColorToSolidBrushConverter}}"
-                                                    Foreground="{Binding Value.Dark.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}">
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="*" />
-                                                        </Grid.RowDefinitions>
-
-                                                        <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignCaptionTextBlock}" Text="{Binding Value.Dark.Color}" />
-                                                        <TextBlock Grid.Row="1" Style="{StaticResource MaterialDesignBody2TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Dark" />
-                                                    </Grid>
-                                                </md:ColorZone>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </Grid>
-
-                            <!-- Selector -->
-                            <md:Card Grid.Column="1" Margin="8 8 0 8">
-                                <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Right">
-                                    <TabControl.Resources>
-                                        <Style x:Key="ColorSwatchContainerStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            <Setter Property="Padding" Value="8 0 0 0" />
-                                        </Style>
-                                        <Style x:Key="ColorSwatchBindingDockPanelStyle" TargetType="{x:Type DockPanel}">
-                                            <Setter Property="Background" Value="{Binding Pair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Converter={StaticResource DataTypeConverter}}" Value="{x:Type demo:ColorPalette}" />
-                                                        <Condition Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Secondary" />
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="Background" Value="{Binding SecondaryPair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                        <Style x:Key="ColorSwatchBindingTextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                            <Setter Property="Background" Value="{Binding Pair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                            <Setter Property="Foreground" Value="{Binding Pair.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Converter={StaticResource DataTypeConverter}}" Value="{x:Type demo:ColorPalette}" />
-                                                        <Condition Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Secondary" />
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="Background" Value="{Binding SecondaryPair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                                    <Setter Property="Foreground" Value="{Binding SecondaryPair.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}" />
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                        <DataTemplate x:Key="ColorSwatchTemplate" DataType="{x:Type demo:ColorSwatch}">
-                                            <DockPanel HorizontalAlignment="Stretch" Style="{StaticResource ColorSwatchBindingDockPanelStyle}">
-                                                <TextBlock DockPanel.Dock="Left"
-                                                    Margin="8"
-                                                    Style="{StaticResource ColorSwatchBindingTextBlockStyle}"
-                                                    TextAlignment="Left"
-                                                    Text="{Binding Name}" />
-                                                <TextBlock DockPanel.Dock="Right"
-                                                    Margin="8"
-                                                    Style="{StaticResource ColorSwatchBindingTextBlockStyle}"
-                                                    TextAlignment="Right"
-                                                    Text="{Binding Pair.Color}" />
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </TabControl.Resources>
-                                    <!-- Swatches -->
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Orientation="Vertical">
-                                                <md:PackIcon Width="20" Height="20" HorizontalAlignment="Center" Kind="PaletteSwatchOutline" />
-                                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Swatches" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <TabItem.Content>
-                                            <ListBox ItemsSource="{Binding ColorPalettes}"
-                                                ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
-                                                ItemTemplate="{StaticResource ColorSwatchTemplate}"
-                                                SelectedItem="{Binding SelectedSwatch.Value, Mode=TwoWay}" />
-                                        </TabItem.Content>
-                                    </TabItem>
-                                    <!-- Palette -->
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Orientation="Vertical">
-                                                <md:PackIcon Width="20" Height="20" HorizontalAlignment="Center" Kind="PaletteOutline" />
-                                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Palette" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <TabItem.Content>
-                                            <md:Transitioner SelectedIndex="0">
-                                                <!-- Color types -->
-                                                <ListBox ItemsSource="{Binding ColorPalettes}"
-                                                    ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
-                                                    ItemTemplate="{StaticResource ColorSwatchTemplate}"
-                                                    SelectedItem="{Binding SelectedPalette.Value, Mode=TwoWay}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="SelectionChanged">
-                                                            <i:InvokeCommandAction Command="{x:Static md:Transitioner.MoveNextCommand}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </ListBox>
-                                                <!-- Color Palette -->
-                                                <md:TransitionerSlide OpeningEffect="{md:TransitionEffect ExpandIn}">
-                                                    <ContentControl Content="{Binding SelectedPalette.Value}">
-                                                        <ContentControl.ContentTemplate>
-                                                            <DataTemplate DataType="{x:Type demo:ColorPalette}">
-                                                                <DockPanel LastChildFill="True">
-                                                                    <faf:TopAppBar DockPanel.Dock="Top" Headline="{Binding Name}" LeadingNavigation="Back" BackCommand="{x:Static md:Transitioner.MoveFirstCommand}" />
-                                                                    <ListBox DockPanel.Dock="Bottom"
-                                                                        ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
-                                                                        ItemTemplate="{StaticResource ColorSwatchTemplate}"
-                                                                        SelectedItem="{Binding DataContext.SelectedSwatch.Value, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Mode=TwoWay}">
-                                                                        <ListBox.Style>
-                                                                            <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
-                                                                                <Setter Property="ItemsSource" Value="{Binding Swatches}" />
-                                                                                <Style.Triggers>
-                                                                                    <DataTrigger Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}" Value="Secondary">
-                                                                                        <Setter Property="ItemsSource" Value="{Binding SecondarySwatches}" />
-                                                                                    </DataTrigger>
-                                                                                </Style.Triggers>
-                                                                            </Style>
-                                                                        </ListBox.Style>
-                                                                    </ListBox>
-                                                                </DockPanel>
-                                                            </DataTemplate>
-                                                        </ContentControl.ContentTemplate>
-                                                    </ContentControl>
-                                                </md:TransitionerSlide>
-                                            </md:Transitioner>
-                                        </TabItem.Content>
-                                    </TabItem>
-                                    <!-- Picker -->
-                                    <TabItem>
-                                        <TabItem.Header>
-                                            <StackPanel Orientation="Vertical">
-                                                <md:PackIcon Width="20" Height="20" HorizontalAlignment="Center" Kind="SelectColor" />
-                                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Picker" />
-                                            </StackPanel>
-                                        </TabItem.Header>
-                                        <TabItem.Content>
-                                            <Grid Margin="8 8">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-
-                                                <TextBox Grid.Row="0"
-                                                    Style="{StaticResource MaterialDesignFilledTextBox}"
-                                                    md:HintAssist.Hint="Hex Value"
-                                                    Text="{Binding SelectedColor.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                                <picker:SquarePicker Grid.Row="1"
-                                                    Margin="0 8 0 0"
-                                                    SelectedColor="{Binding SelectedColor.Value, Mode=TwoWay, Delay=10}" />
-                                            </Grid>
-                                        </TabItem.Content>
-                                    </TabItem>
-                                </TabControl>
-                            </md:Card>
-                        </Grid>
-                    </md:Card>
-                    <md:ColorZone Grid.Row="2" Panel.ZIndex="999" Padding="16 0" md:ElevationAssist.Elevation="Dp4">
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                        <local:ThemePage />
+                    </ScrollViewer>
+                    <md:ColorZone Grid.Row="1" Panel.ZIndex="999" Padding="16 0" md:ElevationAssist.Elevation="Dp4">
                         <mde:StepButtonBar Continue="Finish" Back="Back" />
                     </md:ColorZone>
                 </Grid>
