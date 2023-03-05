@@ -14,9 +14,6 @@
     xmlns:local="clr-namespace:FastAppFramework.Demo.Views"
     xmlns:vm="clr-namespace:FastAppFramework.Demo.ViewModels"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <demo:ColorToColorStateConverter x:Key="ColorToColorStateConverter" />
-    </UserControl.Resources>
     <demo:Stepper Layout="Horizontal"
         IsLinear="True"
         Steps="{Binding Steps}"
@@ -80,7 +77,7 @@
             </DataTemplate>
             <!-- Theme -->
             <DataTemplate DataType="{x:Type vm:ThemePageViewModel}">
-                <Grid>
+                <Grid x:Name="root">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -101,7 +98,7 @@
                                 Style="{StaticResource MaterialDesignToolToggleListBox}"
                                 VerticalAlignment="Center"
                                 ItemsSource="{Binding BaseThemes}"
-                                SelectedItem="{Binding BaseTheme.Value}" />
+                                SelectedItem="{Binding BaseTheme.Value, Mode=TwoWay}" />
                         </Grid>
                     </md:Card>
                     <!-- Color -->
@@ -119,7 +116,7 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="Color" />
-                                <ListBox Grid.Row="1" ItemsSource="{Binding ColorSets}" SelectedItem="{Binding SelectedColorSet.Value}">
+                                <ListBox Grid.Row="1" ItemsSource="{Binding ColorSets}" SelectedItem="{Binding SelectedColorSet.Value, Mode=TwoWay}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -195,6 +192,52 @@
                             <!-- Selector -->
                             <md:Card Grid.Column="1" Margin="8 8 0 8">
                                 <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Right">
+                                    <TabControl.Resources>
+                                        <Style x:Key="ColorSwatchContainerStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="Padding" Value="8 0 0 0" />
+                                        </Style>
+                                        <Style x:Key="ColorSwatchBindingDockPanelStyle" TargetType="{x:Type DockPanel}">
+                                            <Setter Property="Background" Value="{Binding Pair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Converter={StaticResource DataTypeConverter}}" Value="{x:Type demo:ColorPalette}" />
+                                                        <Condition Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Secondary" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background" Value="{Binding SecondaryPair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                        <Style x:Key="ColorSwatchBindingTextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Background" Value="{Binding Pair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                            <Setter Property="Foreground" Value="{Binding Pair.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Converter={StaticResource DataTypeConverter}}" Value="{x:Type demo:ColorPalette}" />
+                                                        <Condition Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Secondary" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background" Value="{Binding SecondaryPair.Color, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                                    <Setter Property="Foreground" Value="{Binding SecondaryPair.ForegroundColor, Converter={StaticResource ColorToSolidBrushConverter}}" />
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                        <DataTemplate x:Key="ColorSwatchTemplate" DataType="{x:Type demo:ColorSwatch}">
+                                            <DockPanel HorizontalAlignment="Stretch" Style="{StaticResource ColorSwatchBindingDockPanelStyle}">
+                                                <TextBlock DockPanel.Dock="Left"
+                                                    Margin="8"
+                                                    Style="{StaticResource ColorSwatchBindingTextBlockStyle}"
+                                                    TextAlignment="Left"
+                                                    Text="{Binding Name}" />
+                                                <TextBlock DockPanel.Dock="Right"
+                                                    Margin="8"
+                                                    Style="{StaticResource ColorSwatchBindingTextBlockStyle}"
+                                                    TextAlignment="Right"
+                                                    Text="{Binding Pair.Color}" />
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </TabControl.Resources>
                                     <!-- Swatches -->
                                     <TabItem>
                                         <TabItem.Header>
@@ -204,28 +247,13 @@
                                             </StackPanel>
                                         </TabItem.Header>
                                         <TabItem.Content>
-                                            <ListBox ItemsSource="{Binding Swatches}" SelectedItem="{Binding SelectedSwatch.Value}">
-                                                <ListBox.ItemContainerStyle>
-                                                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                        <Setter Property="Padding" Value="4 2" />
-                                                    </Style>
-                                                </ListBox.ItemContainerStyle>
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate DataType="{x:Type mdc:Swatch}">
-                                                        <md:ColorZone Padding="8"
-                                                            Mode="Custom"
-                                                            Background="{Binding ExemplarHue.Color, Converter={StaticResource ColorToSolidBrushConverter}}"
-                                                            Foreground="{Binding ExemplarHue.Foreground, Converter={StaticResource ColorToSolidBrushConverter}}">
-                                                            <TextBlock TextAlignment="Center" Text="{Binding Name}" />
-                                                        </md:ColorZone>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
+                                            <ListBox ItemsSource="{Binding ColorPalettes}"
+                                                ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
+                                                ItemTemplate="{StaticResource ColorSwatchTemplate}"
+                                                SelectedItem="{Binding SelectedSwatch.Value, Mode=TwoWay}" />
                                         </TabItem.Content>
                                     </TabItem>
                                     <!-- Palette -->
-                                    <!-- TODO: Not implemented, yet -->
                                     <TabItem>
                                         <TabItem.Header>
                                             <StackPanel Orientation="Vertical">
@@ -233,6 +261,48 @@
                                                 <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Palette" />
                                             </StackPanel>
                                         </TabItem.Header>
+                                        <TabItem.Content>
+                                            <md:Transitioner SelectedIndex="0">
+                                                <!-- Color types -->
+                                                <ListBox ItemsSource="{Binding ColorPalettes}"
+                                                    ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
+                                                    ItemTemplate="{StaticResource ColorSwatchTemplate}"
+                                                    SelectedItem="{Binding SelectedPalette.Value, Mode=TwoWay}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="SelectionChanged">
+                                                            <i:InvokeCommandAction Command="{x:Static md:Transitioner.MoveNextCommand}" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ListBox>
+                                                <!-- Color Palette -->
+                                                <md:TransitionerSlide OpeningEffect="{md:TransitionEffect ExpandIn}">
+                                                    <ContentControl Content="{Binding SelectedPalette.Value}">
+                                                        <ContentControl.ContentTemplate>
+                                                            <DataTemplate DataType="{x:Type demo:ColorPalette}">
+                                                                <DockPanel LastChildFill="True">
+                                                                    <faf:TopAppBar DockPanel.Dock="Top" Headline="{Binding Name}" LeadingNavigation="Back" BackCommand="{x:Static md:Transitioner.MoveFirstCommand}" />
+                                                                    <ListBox DockPanel.Dock="Bottom"
+                                                                        ItemContainerStyle="{StaticResource ColorSwatchContainerStyle}"
+                                                                        ItemTemplate="{StaticResource ColorSwatchTemplate}"
+                                                                        SelectedItem="{Binding DataContext.SelectedSwatch.Value, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Mode=TwoWay}">
+                                                                        <ListBox.Style>
+                                                                            <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+                                                                                <Setter Property="ItemsSource" Value="{Binding Swatches}" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding DataContext.SelectedColorSet.Value.Key, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}" Value="Secondary">
+                                                                                        <Setter Property="ItemsSource" Value="{Binding SecondarySwatches}" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </ListBox.Style>
+                                                                    </ListBox>
+                                                                </DockPanel>
+                                                            </DataTemplate>
+                                                        </ContentControl.ContentTemplate>
+                                                    </ContentControl>
+                                                </md:TransitionerSlide>
+                                            </md:Transitioner>
+                                        </TabItem.Content>
                                     </TabItem>
                                     <!-- Picker -->
                                     <TabItem>
