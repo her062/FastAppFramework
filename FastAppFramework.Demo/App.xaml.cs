@@ -23,6 +23,9 @@ namespace FastAppFramework.Demo
             base.RegisterNavigationTypes(containerRegistry);
 
             containerRegistry.RegisterForNavigation<FirstWizardFrame, FirstWizardFrameViewModel>();
+            containerRegistry.RegisterForNavigation<LicenseAgreementPage, LicenseAgreementPageViewModel>();
+            containerRegistry.RegisterForNavigation<OverviewPage, OverviewPageViewModel>();
+            containerRegistry.RegisterForNavigation<ThemePage, ThemePageViewModel>();
         }
 #endregion
     }
