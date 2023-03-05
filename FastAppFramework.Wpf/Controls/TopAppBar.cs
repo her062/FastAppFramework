@@ -139,14 +139,10 @@ namespace FastAppFramework.Wpf
         {
             base.OnApplyTemplate();
 
-            if (this._backButton != null)
-                this._backButton.Click -= BackButton_Click;
-
             this._backButton = Template.FindName(PART_BackButton, this) as Button;
             if (this._backButton != null)
             {
-                this._backButton.IsEnabled = this.BackCommand?.CanExecute(null) ?? true;
-                this._backButton.Click += BackButton_Click;
+                this._backButton.Command = this.BackCommand;
             }
         }
 #endregion
@@ -155,28 +151,8 @@ namespace FastAppFramework.Wpf
         private static void BackCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var obj = d as TopAppBar;
-            if (obj != null)
-            {
-                if (e.OldValue != null)
-                    ((ICommand)e.OldValue).CanExecuteChanged -= obj.BackCommand_CanExecuteChanged;
-                if (e.NewValue != null)
-                {
-                    ((ICommand)e.NewValue).CanExecuteChanged += obj.BackCommand_CanExecuteChanged;
-                    obj.BackCommand_CanExecuteChanged(e.NewValue, EventArgs.Empty);
-                }
-            }
-        }
-        private void BackCommand_CanExecuteChanged(object? sender, EventArgs e)
-        {
-            var command = sender as ICommand;
-            if ((this._backButton != null) && (command != null))
-                this._backButton.IsEnabled = command.CanExecute(null);
-        }
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            RaiseEvent(new RoutedEventArgs(BackEvent, this));
-            if ((this.BackCommand != null) && this.BackCommand.CanExecute(null))
-                this.BackCommand.Execute(null);
+            if ((obj != null) && (obj._backButton != null))
+                obj._backButton.Command = obj.BackCommand;
         }
 
         private static void TrailingIconPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

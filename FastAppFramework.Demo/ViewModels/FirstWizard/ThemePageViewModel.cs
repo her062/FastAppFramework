@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using FastAppFramework.Core.Comparers;
 using FastAppFramework.Wpf;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
@@ -33,14 +34,25 @@ namespace FastAppFramework.Demo.ViewModels
         {
             get; private set;
         }
-        public ReactivePropertySlim<Swatch?> SelectedSwatch
+        public ReactivePropertySlim<ColorPalette?> SelectedPalette
+        {
+            get; private set;
+        }
+        public ReactivePropertySlim<ColorSwatch?> SelectedSwatch
         {
             get; private set;
         }
 
+        public ReactivePropertySlim<int> TransitionIndex => new ReactivePropertySlim<int>().AddTo(this);
+
         public IEnumerable<BaseTheme> BaseThemes => Enum.GetValues<BaseTheme>().Where(v => (v != MaterialDesignThemes.Wpf.BaseTheme.Inherit));
         public IEnumerable<KeyValuePair<ColorSet.Order, ColorSet>> ColorSets => this._colorSets;
-        public IEnumerable<Swatch> Swatches => this._swatchesProvider.Swatches;
+        public IEnumerable<ColorPalette> ColorPalettes => this._swatchesProvider.Swatches
+            .Select(v => new ColorPalette(
+                v.Name, new ColorPair(v.ExemplarHue.Color, v.ExemplarHue.Foreground), new ColorPair(v.AccentExemplarHue?.Color ?? v.ExemplarHue.Color, v.AccentExemplarHue?.Foreground ?? v.ExemplarHue.Foreground),
+                v.PrimaryHues.OrderBy(v => v.Name, NaturalStringComparer.Instance).Select(s => new ColorSwatch(s.Name, new ColorPair(s.Color, s.Foreground))),
+                v.AccentHues.OrderBy(v => v.Name, NaturalStringComparer.Instance).Select(s => new ColorSwatch(s.Name, new ColorPair(s.Color, s.Foreground)))
+            ));
 #endregion
 
 #region Fields
@@ -69,20 +81,33 @@ namespace FastAppFramework.Demo.ViewModels
                 this.BaseTheme = new ReactivePropertySlim<BaseTheme>(this._theme.GetBaseTheme()).AddTo(this);
                 this.SelectedColorSet = new ReactivePropertySlim<KeyValuePair<ColorSet.Order, ColorSet>>(this._colorSets.First()).AddTo(this);
                 this.SelectedColor = new ReactivePropertySlim<Color>(this.SelectedColorSet.Value.Value.Color).AddTo(this);
-                this.SelectedSwatch = new ReactivePropertySlim<Swatch?>(this.Swatches.FirstOrDefault(v => (v.ExemplarHue.Color == this.SelectedColor.Value))).AddTo(this);
+                this.SelectedPalette = new ReactivePropertySlim<ColorPalette?>().AddTo(this);
+                this.SelectedSwatch = new ReactivePropertySlim<ColorSwatch?>().AddTo(this);
             }
 
             // Setup Commands.
             {
                 this.SetThemeCommand = new ReactiveCommand<Action<ITheme>>()
-                    .WithSubscribe(v => {
-                        v(this._theme);
+                    .WithSubscribe(action => {
+                        action(this._theme);
                         this._paletteHelper.SetTheme(this._theme);
-
                         foreach (var item in this._colorSets)
                             item.Value.Apply(this._theme, item.Key);
+
                         this.SelectedColor.Value = this.SelectedColorSet.Value.Value.Color;
-                        this.SelectedSwatch.Value = this.Swatches.FirstOrDefault(s => (s.ExemplarHue.Color == this.SelectedColor.Value));
+                        switch (this.SelectedColorSet.Value.Key)
+                        {
+                            case ColorSet.Order.Primary:
+                                this.SelectedPalette.Value = this.ColorPalettes.FirstOrDefault(v => (v.Swatches.FirstOrDefault(s => (this.SelectedColor.Value == s.Pair.Color)) != null));
+                                this.SelectedSwatch.Value = this.ColorPalettes.FirstOrDefault(v => (this.SelectedColor.Value == v.Pair.Color)) ?? this.SelectedPalette.Value?.Swatches.FirstOrDefault(v => (this.SelectedColor.Value == v.Pair.Color));
+                                break;
+                            case ColorSet.Order.Secondary:
+                                this.SelectedPalette.Value = this.ColorPalettes.FirstOrDefault(v => (v.SecondarySwatches.FirstOrDefault(s => (this.SelectedColor.Value == s.Pair.Color)) != null));
+                                this.SelectedSwatch.Value = this.ColorPalettes.FirstOrDefault(v => (this.SelectedColor.Value == v.SecondaryPair.Color)) ?? this.SelectedPalette.Value?.SecondarySwatches.FirstOrDefault(v => (this.SelectedColor.Value == v.Pair.Color));
+                                break;
+                            default:
+                                break;
+                        }
                     }).AddTo(this);
             }
 
@@ -90,6 +115,9 @@ namespace FastAppFramework.Demo.ViewModels
             {
                 this.BaseTheme.Subscribe(v => {
                     this.SetThemeCommand.Execute(t => t.SetBaseTheme(v.GetBaseTheme()));
+                }).AddTo(this);
+                this.SelectedColorSet.Subscribe(v => {
+                    this.SetThemeCommand.Execute(t => {});
                 }).AddTo(this);
                 this.SelectedColor.Subscribe(v => {
                     this.SetThemeCommand.Execute(t => {
@@ -109,8 +137,7 @@ namespace FastAppFramework.Demo.ViewModels
                 this.SelectedSwatch.Subscribe(v => {
                     if (v == null)
                         return;
-
-                    this.SelectedColor.Value = ((this.SelectedColorSet.Value.Key == ColorSet.Order.Secondary) && (v.AccentExemplarHue != null)) ? v.AccentExemplarHue.Color : v.ExemplarHue.Color;
+                    this.SelectedColor.Value = ((v is ColorPalette p) && (this.SelectedColorSet.Value.Key == ColorSet.Order.Secondary)) ? p.SecondaryPair.Color : v.Pair.Color;
                 }).AddTo(this);
             }
         }
