@@ -1,0 +1,34 @@
+<faf:PreferencePage x:Class="FastAppFramework.Demo.Views.ThemeSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
+    xmlns:local="clr-namespace:FastAppFramework.Demo.Views"
+    mc:Ignorable="d"
+    IsDirty="{Binding IsDirty.Value}" HasErrors="{Binding HasErrors.Value}"
+    ApplyCommand="{Binding CommitCommand}" RevertCommand="{Binding RollbackCommand}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
+            <!-- Serialization -->
+            <md:Card Margin="8 8 8 0" Padding="8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                        VerticalAlignment="Center"
+                        Text="Load Theme from File" />
+                    <CheckBox Grid.Column="1"
+                        Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding LoadFromFile.Value}" />
+                </Grid>
+            </md:Card>
+            <local:ThemePage DataContext="{Binding Super}" />
+        </StackPanel>
+    </ScrollViewer>
+</faf:PreferencePage>

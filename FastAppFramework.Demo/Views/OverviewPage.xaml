@@ -1,0 +1,30 @@
+<faf:NavigationPage x:Class="FastAppFramework.Demo.Views.OverviewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
+    xmlns:demo="clr-namespace:FastAppFramework.Demo"
+    xmlns:local="clr-namespace:FastAppFramework.Demo.Views"
+    mc:Ignorable="d">
+    <StackPanel Orientation="Vertical">
+        <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+            Margin="16"
+            TextAlignment="Center"
+            Text="Welcome to FastAppFramework" />
+        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+            Margin="16 8"
+            TextAlignment="Center"
+            TextWrapping="Wrap"
+            Text="Framework for early launch of WPF GUI applications for your projects" />
+
+        <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+            Margin="16"
+            HorizontalAlignment="Center"
+            Content="{md:PackIcon Github}"
+            ToolTip="Visit GitHub"
+            Command="{Binding OpenInBrowserCommand}"
+            CommandParameter="https://github.com/her062/FastAppFramework" />
+    </StackPanel>
+</faf:NavigationPage>
