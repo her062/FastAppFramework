@@ -41,6 +41,8 @@ namespace FastAppFramework.Demo
             containerRegistry.RegisterForNavigation<LicenseAgreementPage, LicenseAgreementPageViewModel>();
             containerRegistry.RegisterForNavigation<OverviewPage, OverviewPageViewModel>();
             containerRegistry.RegisterForNavigation<ThemePage, ThemePageViewModel>();
+            containerRegistry.RegisterForNavigation<TopAppBarPage>();
+            containerRegistry.RegisterForNavigation<SearchableComboBoxPage>();
             containerRegistry.RegisterForNavigation<ThemeSettingsPage, ThemeSettingsPageViewModel>();
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
