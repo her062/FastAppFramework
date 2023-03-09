@@ -1,4 +1,4 @@
-<UserControl x:Class="FastAppFramework.Demo.Views.ThemePage"
+<faf:NavigationPage x:Class="FastAppFramework.Demo.Views.ThemePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -267,4 +267,4 @@
             </Grid>
         </md:Card>
     </Grid>
-</UserControl>
+</faf:NavigationPage>

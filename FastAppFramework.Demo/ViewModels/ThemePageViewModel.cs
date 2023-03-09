@@ -139,7 +139,18 @@ namespace FastAppFramework.Demo.ViewModels
                         return;
                     this.SelectedColor.Value = ((v is ColorPalette p) && (this.SelectedColorSet.Value.Key == ColorSet.Order.Secondary)) ? p.SecondaryPair.Color : v.Pair.Color;
                 }).AddTo(this);
+
+                var themeManager = this._paletteHelper.GetThemeManager();
+                if (themeManager != null)
+                    themeManager.ThemeChanged += ThemeManager_ThemeChanged;
             }
+        }
+
+        private void ThemeManager_ThemeChanged(object? sender, ThemeChangedEventArgs e)
+        {
+            this.BaseTheme.Value = this._theme.GetBaseTheme();
+            foreach (var item in this._colorSets)
+                item.Value.Apply(this._theme, item.Key);
         }
 #endregion
     }

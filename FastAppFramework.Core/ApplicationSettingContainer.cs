@@ -171,7 +171,9 @@ namespace FastAppFramework.Core
                         {
                             // The value of unknown key is kept as is.
                             FastApplication.Current.Logger.LogWarning($"A setting('{item.Key}') is not registered");
-                            this._values.Value.Add(item.Key, token);
+                            if (!this._values.Value.ContainsKey(item.Key))
+                                this._values.Value.Add(item.Key, token);
+                            SetValueInternal(item.Key, token);
                             continue;
                         }
 
