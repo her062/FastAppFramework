@@ -1,0 +1,82 @@
+<faf:NavigationPage x:Class="FastAppFramework.Demo.Views.SearchableComboBoxPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:faf="clr-namespace:FastAppFramework.Wpf;assembly=FastAppFramework.Wpf"
+    xmlns:demo="clr-namespace:FastAppFramework.Demo"
+    xmlns:local="clr-namespace:FastAppFramework.Demo.Views"
+    mc:Ignorable="d">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Orientation="Vertical" Margin="8 0">
+            <!-- Default -->
+            <StackPanel Orientation="Vertical" Margin="0 8 0 0">
+                <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="0 0 0 4" Text="Default" />
+                <faf:SearchableComboBox MinWidth="200" FilteringPropertyName="Content">
+                    <ComboBoxItem Content="Item 1" />
+                    <ComboBoxItem Content="Item 2" />
+                    <ComboBoxItem Content="Item 3" />
+                    <ComboBoxItem Content="Item 4" />
+                    <ComboBoxItem Content="Item 5" />
+                    <ComboBoxItem Content="Item A" />
+                    <ComboBoxItem Content="Item B" />
+                    <ComboBoxItem Content="Item C" />
+                    <ComboBoxItem Content="Item D" />
+                    <ComboBoxItem Content="Item E" />
+                </faf:SearchableComboBox>
+            </StackPanel>
+
+            <!-- FastAppFramework.Wpf.SearchableComboBox -->
+            <StackPanel Orientation="Vertical" Margin="0 8 0 0">
+                <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="0 0 0 4" Text="FastAppFramework.Wpf.SearchableComboBox" />
+                <faf:SearchableComboBox MinWidth="200" Style="{StaticResource FastAppFramework.Wpf.SearchableComboBox}" FilteringPropertyName="Content">
+                    <ComboBoxItem Content="Item 1" />
+                    <ComboBoxItem Content="Item 2" />
+                    <ComboBoxItem Content="Item 3" />
+                    <ComboBoxItem Content="Item 4" />
+                    <ComboBoxItem Content="Item 5" />
+                    <ComboBoxItem Content="Item A" />
+                    <ComboBoxItem Content="Item B" />
+                    <ComboBoxItem Content="Item C" />
+                    <ComboBoxItem Content="Item D" />
+                    <ComboBoxItem Content="Item E" />
+                </faf:SearchableComboBox>
+            </StackPanel>
+
+            <!-- FastAppFramework.Wpf.SearchableComboBox.Filled -->
+            <StackPanel Orientation="Vertical" Margin="0 8 0 0">
+                <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="0 0 0 4" Text="FastAppFramework.Wpf.SearchableComboBox.Filled" />
+                <faf:SearchableComboBox MinWidth="200" Style="{StaticResource FastAppFramework.Wpf.SearchableComboBox.Filled}" FilteringPropertyName="Content">
+                    <ComboBoxItem Content="Item 1" />
+                    <ComboBoxItem Content="Item 2" />
+                    <ComboBoxItem Content="Item 3" />
+                    <ComboBoxItem Content="Item 4" />
+                    <ComboBoxItem Content="Item 5" />
+                    <ComboBoxItem Content="Item A" />
+                    <ComboBoxItem Content="Item B" />
+                    <ComboBoxItem Content="Item C" />
+                    <ComboBoxItem Content="Item D" />
+                    <ComboBoxItem Content="Item E" />
+                </faf:SearchableComboBox>
+            </StackPanel>
+
+            <!-- FastAppFramework.Wpf.SearchableComboBox.Outlined -->
+            <StackPanel Orientation="Vertical" Margin="0 8 0 0">
+                <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="0 0 0 4" Text="FastAppFramework.Wpf.SearchableComboBox.Outlined" />
+                <faf:SearchableComboBox MinWidth="200" Style="{StaticResource FastAppFramework.Wpf.SearchableComboBox.Outlined}" FilteringPropertyName="Content">
+                    <ComboBoxItem Content="Item 1" />
+                    <ComboBoxItem Content="Item 2" />
+                    <ComboBoxItem Content="Item 3" />
+                    <ComboBoxItem Content="Item 4" />
+                    <ComboBoxItem Content="Item 5" />
+                    <ComboBoxItem Content="Item A" />
+                    <ComboBoxItem Content="Item B" />
+                    <ComboBoxItem Content="Item C" />
+                    <ComboBoxItem Content="Item D" />
+                    <ComboBoxItem Content="Item E" />
+                </faf:SearchableComboBox>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</faf:NavigationPage>
