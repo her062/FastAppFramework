@@ -90,9 +90,6 @@ namespace FastAppFramework.Demo.ViewModels
 
             // Subscribes.
             {
-                this.ActiveStep.Subscribe(v => {
-                    Console.WriteLine(v?.Content.GetType());
-                }).AddTo(this);
             }
         }
 #endregion
