@@ -472,3 +472,8 @@ public partial class App : FastWpfApplication
 * [MaterialDesignThemes.MahApps](https://www.nuget.org/packages/MaterialDesignThemes.MahApps)
 * [MahApps.Metro](https://www.nuget.org/packages/MahApps.Metro)
 * [Hardcodet.NotifyIcon.Wpf](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf)
+
+### FastAppFramework.Demo
+* [MaterialDesignExtensions](https://www.nuget.org/packages/MaterialDesignExtensions)
+* [PixiEditor.ColorPicker](https://www.nuget.org/packages/PixiEditor.ColorPicker)
+* [SharpVectors.Wpf](https://www.nuget.org/packages/SharpVectors.Wpf)
