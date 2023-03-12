@@ -41,13 +41,11 @@ public partial class App : FastWpfApplication
 {
     protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
     {
-        base.RegisterNavigationTypes(containerRegistry);
         ...
     }
 
     protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
     {
-        base.RegisterSettingTypes(settingRegistry);
         ...
     }
 }
@@ -122,7 +120,6 @@ public partial class App : FastWpfApplication
     ...
     protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
     {
-        base.RegisterNavigationTypes(containerRegistry);
         containerRegistry.RegisterForNavigation<OverviewPage, OverviewPageViewModel>();
     }
     ...
@@ -298,6 +295,7 @@ public partial class App : FastWpfApplication
     protected override void RegisterNotifyIconContextMenuItems(ContextMenuContainer container)
     {
         base.RegisterNotifyIconContextMenuItems(container);
+
         container.Add("Item 1", new ReactiveCommand().WithSubscribe(() => { MessageBox.Show("'Item 1' is clicked!"); }));
     }
     ...
