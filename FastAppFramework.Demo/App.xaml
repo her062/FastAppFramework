@@ -5,7 +5,12 @@
     xmlns:local="clr-namespace:FastAppFramework.Demo">
 
     <faf:FastWpfApplication.Config>
-        <faf:ApplicationConfiguration WindowTitle="Fast App Framework Demo" RootPage="FirstWizardFrame" HomePage="OverviewPage" />
+        <faf:ApplicationConfiguration
+            WindowTitle="Fast App Framework Demo"
+            RootPage="FirstWizardFrame"
+            HomePage="OverviewPage"
+            HasNotifyIcon="True"
+            ExitConfirmation="True" />
     </faf:FastWpfApplication.Config>
 
     <Application.Resources>

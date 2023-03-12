@@ -219,6 +219,8 @@ var input = await service.ShowInputAsync("Input", "Please input any text");
 ```
 
 #### Application Exit Confirmation
+![Alt text](docs/images/screen-exit.png "Exit Confirmation")
+
 In sometimes, you may want to confirm really okay to quit application if the user performs an action to quit the application(For example, Push `Close` button of the window).
 The confirmation message dialog will be shown if you set `True` to `faf:ApplicationConfiguration.ExitConfirmation` in `App.xaml`.
 And quiting the application process will be canceled if the user's answer is negative.
@@ -239,6 +241,8 @@ public partial class App : FastWpfApplication
 ```
 
 ### Notify Icon
+![Alt text](docs/images/screen-notifyicon.png "Notify Icon")
+
 The notify icon will be added in the notification area if you set `True` to `faf:ApplicationConfiguration.HasNotifyIcon` in `App.xaml`.
 An instance of `INotifyIconService` will be registered in DI Container and you can get it by the following code.
 ```xml
