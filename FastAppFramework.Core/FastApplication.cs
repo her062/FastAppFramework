@@ -100,16 +100,13 @@ namespace FastAppFramework.Core
             this._settingContainer = new ApplicationSettingContainer(containerRegistry);
             containerRegistry.RegisterInstance<IApplicationSettingProvider>(this._settingContainer);
             // Register setting types.
+            RegisterRequiredSettingTypes(this._settingContainer);
             RegisterSettingTypes(this._settingContainer);
 
             this.Logger.LogDebug("");
         }
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-        }
-        protected virtual void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
-        {
-        }
+        protected abstract void RegisterRequiredSettingTypes(IApplicationSettingRegistry settingRegistry);
+        protected abstract void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry);
 #endregion
     }
 }

@@ -1,14 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\FastAppFramework.Wpf\FastAppFramework.Wpf.csproj" />
-  </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <ApplicationIcon>..\docs\images\favicon.ico</ApplicationIcon>
   </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\FastAppFramework.Wpf\FastAppFramework.Wpf.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignExtensions" Version="*"/>
+    <PackageReference Include="PixiEditor.ColorPicker" Version="*"/>
+    <PackageReference Include="SharpVectors.Wpf" Version="*"/>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\LICENSE" LogicalName="LICENSE"/>
+    <Resource Include="../docs/images/favicon.svg"/>
+  </ItemGroup>
 </Project>

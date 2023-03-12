@@ -1,3 +1,4 @@
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -198,6 +199,7 @@ namespace FastAppFramework.Wpf
 
                 // Register navigation types in modules.
                 {
+                    RegisterBaseNavigationTypes(this._containerRegistry);
                     RegisterNavigationTypes(this._containerRegistry);
                     foreach (var item in catalog.Modules)
                     {
@@ -285,24 +287,13 @@ namespace FastAppFramework.Wpf
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            base.RegisterTypes(containerRegistry);
-
             this._containerRegistry = new ContainerRegistryWrapper(containerRegistry);
 
             this.Logger.LogDebug("");
         }
-        protected virtual void RegisterNavigationTypes(IContainerRegistry containerRegistry)
+        protected abstract void RegisterNavigationTypes(IContainerRegistry containerRegistry);
+        protected override void RegisterRequiredSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
-            containerRegistry.RegisterInstance<IMetroDialogService>(new MetroDialogService(this._shell!));
-
-            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
-            containerRegistry.RegisterForNavigation<MainFrame, MainFrameViewModel>(MainFrameName);
-            containerRegistry.RegisterForNavigation<PreferenceFrame, PreferenceFrameViewModel>(PreferenceFrameName);
-        }
-        protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
-        {
-            base.RegisterSettingTypes(settingRegistry);
-
             settingRegistry.Register<string>(HomePageSetting, Config.HomePage, Variability.Volatile);
 
             this.Logger.LogDebug("");
@@ -318,6 +309,17 @@ namespace FastAppFramework.Wpf
                 }), int.MaxValue);
 
             this.Logger.LogDebug("");
+        }
+#endregion
+
+#region Private Functions
+        private void RegisterBaseNavigationTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterInstance<IMetroDialogService>(new MetroDialogService(this._shell!));
+
+            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
+            containerRegistry.RegisterForNavigation<MainFrame, MainFrameViewModel>(MainFrameName);
+            containerRegistry.RegisterForNavigation<PreferenceFrame, PreferenceFrameViewModel>(PreferenceFrameName);
         }
 #endregion
     }

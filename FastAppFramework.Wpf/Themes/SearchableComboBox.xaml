@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:FastAppFramework.Wpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/CustomPopupComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchBar.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- PopupHeader Template -->
+    <ControlTemplate x:Key="SearchableComboBoxPopupHeaderTemplate" TargetType="{x:Type ContentControl}">
+        <local:SearchBar Margin="12 8" Text="{Binding FilterText, RelativeSource={RelativeSource AncestorType={x:Type local:SearchableComboBox}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <local:SearchBar.Style>
+                <Style TargetType="{x:Type local:SearchBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchBar}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsDropDownOpen, RelativeSource={RelativeSource AncestorType={x:Type local:SearchableComboBox}}}" Value="True">
+                            <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </local:SearchBar.Style>
+        </local:SearchBar>
+    </ControlTemplate>
+
+    <!-- Styles -->
+    <Style x:Key="FastAppFramework.Wpf.SearchableComboBox" TargetType="{x:Type local:SearchableComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.CustomPopupComboBox}">
+        <Setter Property="PopupHeaderTemplate" Value="{StaticResource SearchableComboBoxPopupHeaderTemplate}" />
+    </Style>
+    <Style x:Key="FastAppFramework.Wpf.SearchableComboBox.Filled" TargetType="{x:Type local:SearchableComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.CustomPopupComboBox.Filled}">
+        <Setter Property="PopupHeaderTemplate" Value="{StaticResource SearchableComboBoxPopupHeaderTemplate}" />
+    </Style>
+    <Style x:Key="FastAppFramework.Wpf.SearchableComboBox.Outlined" TargetType="{x:Type local:SearchableComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.CustomPopupComboBox.Outlined}">
+        <Setter Property="PopupHeaderTemplate" Value="{StaticResource SearchableComboBoxPopupHeaderTemplate}" />
+    </Style>
+</ResourceDictionary>

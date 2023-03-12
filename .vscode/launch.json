@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/FastAppFramework.Demo/bin/Debug/net6.0-windows/FastAppFramework.Demo.dll",
+            "program": "${workspaceFolder}/FastAppFramework.Demo/bin/Debug/net6.0-windows/win-x64/FastAppFramework.Demo.dll",
             "args": [],
             "cwd": "${workspaceFolder}/FastAppFramework.Demo",
             "console": "internalConsole",

@@ -1,6 +1,7 @@
 # FastAppFramework
 Framework for early launch of WPF GUI applications for your projects
 
+![Alt text](docs/images/screen-home.png "FastAppFramework")
 ## Background
 In the development of GUI applications using WPF, I always spent a lot of time to consider the basic screen structures and navigation mechanism for my applications.
 Of course, I understand very good libraries for WPF GUI applications are available such as [Prism](https://github.com/PrismLibrary/Prism), [ReactiveProperty](https://github.com/runceel/ReactiveProperty), [Material Design In XML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit), and so on.
@@ -40,13 +41,11 @@ public partial class App : FastWpfApplication
 {
     protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
     {
-        base.RegisterNavigationTypes(containerRegistry);
         ...
     }
 
     protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
     {
-        base.RegisterSettingTypes(settingRegistry);
         ...
     }
 }
@@ -100,36 +99,38 @@ PreferenceFrame --> PreferenceRegion
 In this framework, we use [Navigation Using the Prism Library](https://prismlibrary.com/docs/wpf/region-navigation/index.html) as the base mechanism.
 
 #### Root Page Navigation
+![Alt text](docs/images/screen-firstwizard.png "FirstWizardFrame")
+
 The default Root Page is `Main Frame`.
 This means the user will look at any main content first when he/she boot you application.  
 However in some times, you want to display another view at startup.
 For example, the user should input some information follow the wizard before starting main procedures at first boot.  
 You can change the startup view if you set `faf:ApplicationConfiguration.RootPage` in `App.xaml`.  
-For example in the following code, `FirstWizardPage` will be shown as the startup view.
+For example in the following code, `FirstWizardFrame` will be shown as the startup view.
 ```xml
-<faf:ApplicationConfiguration RootPage="FirstWizardPage" />
+<faf:ApplicationConfiguration RootPage="FirstWizardFrame" />
 ```
-
 #### Main Contents Navigation
 `Menu Navigation` and `Manual Navigation` are provided as the method for main contents navigation.  
 First in either way, you need to register your class types as the target of navigation using `RegisterNavigationTypes` function in `App.xaml.cs`.  
-For example in the following code, `MainPage` will be registered as the navigation target.
+For example in the following code, `OverviewPage` will be registered as the navigation target.
 ```csharp
 public partial class App : FastWpfApplication
 {
     ...
     protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
     {
-        base.RegisterNavigationTypes(containerRegistry);
-        containerRegistry.RegisterForNavigation<MainPage>();
+        containerRegistry.RegisterForNavigation<OverviewPage, OverviewPageViewModel>();
     }
     ...
 }
 ```
 
-If `MainPage` is a sub class of `NavigationPage`, the text set in `MainPage.Title` will be displayed in the top application bar in `Main Frame` when `MainPage` appears.
+If `OverviewPage` is a sub class of `NavigationPage`, the text set in `OverviewPage.Title` will be displayed in the top application bar in `Main Frame` when `OverviewPage` appears.
 
 ##### Menu Navigation
+![Alt text](docs/images/screen-menu.png "Main Menu")
+
 If you give `NavigationPage` attribute to your view class as the following code, `Main` will be added in the main menu and you can navigate to this view.  
 > **Note**
 > You need to set `RegionType.Main` to `Region` property for the view of a main content.
@@ -164,7 +165,7 @@ regionManager.Regions[FastWpfApplication.MainRegionName].RequestNavigate("MainPa
 You can set a view as the home page if you set `faf:ApplicationConfiguration.HomePage` in `App.xaml` as the following code.
 If you set it, you can quickly navigate to this view by clicking `Home` button in the application title bar.
 ```xml
-<faf:ApplicationConfiguration HomePage="MainPage" />
+<faf:ApplicationConfiguration HomePage="OverviewPage" />
 ```
 
 The home page can change dynamically as the following code.
@@ -173,6 +174,8 @@ FastWpfApplication.Current.Settings.SetValue(FastWpfApplication.HomePageSetting,
 ```
 
 #### Preference Editors Navigation
+![Alt text](docs/images/screen-preference.png "Preference Editors")
+
 `Menu Navigation` and `Manual Navigation` are provided as the method for preference editors navigation.
 It is same as [Main Contents Navigation](#Main-Contents-Navigation) how to register views as the navigation target.
 
@@ -185,32 +188,36 @@ In addition, if your view class is a sub class of `PreferencePage`, this framewo
 ```csharp
 using FastAppFramework.Wpf;
 
-[NavigationPage("General", Region = NavigationPageAttribute.RegionType.Preference)]
-public partial class GeneralPreferencePage : PreferencePage
+[NavigationPage("Color Theme", Region = NavigationPageAttribute.RegionType.Preference)]
+public partial class ThemeSettingsPage : PreferencePage
 {
 }
 ```
 
 ##### Manual Navigation
 You can navigate to any view by calling `IRegions.RequestNavigate` function.  
-For example in the following code, `GeneralPreferencePage` will appears in `Preference Frame`.
+For example in the following code, `ThemeSettingsPage` will appears in `Preference Frame`.
 ```csharp
 var regionManager = FastWpfApplication.Current.Container.Resolve<IRegionManager>();
-regionManager.Regions[FastWpfApplication.PreferenceRegionName].RequestNavigate("GeneralPreferencePage");
+regionManager.Regions[FastWpfApplication.PreferenceRegionName].RequestNavigate("ThemeSettingsPage");
 ```
 
 ### Dialogs
+![Alt text](docs/images/screen-dialog.png "Dialog")
+
 This framework recommend to use dialogs implemented in `MahApps.Metro`.
 An instance of `IMetroDialogService` is registered in DI Container and you can use it by the following code.
 ```csharp
 var service = FastWpfApplication.Current.Container.Resolve<IMetroDialogService>();
 // Show message dialog.
-var res = await service.ShowMessageAsync("Message", "This is message dialog", MessageDialogStyle.AffirmativeAndNegative);
+var res = await service.ShowMessageAsync("Message Dialog", "This is sample message dialog", MessageDialogStyle.AffirmativeAndNegative);
 // Show input dialog.
-var input = await service.ShowInputAsync("Input", "Please input any");
+var input = await service.ShowInputAsync("Input", "Please input any text");
 ```
 
 #### Application Exit Confirmation
+![Alt text](docs/images/screen-exit.png "Exit Confirmation")
+
 In sometimes, you may want to confirm really okay to quit application if the user performs an action to quit the application(For example, Push `Close` button of the window).
 The confirmation message dialog will be shown if you set `True` to `faf:ApplicationConfiguration.ExitConfirmation` in `App.xaml`.
 And quiting the application process will be canceled if the user's answer is negative.
@@ -231,6 +238,8 @@ public partial class App : FastWpfApplication
 ```
 
 ### Notify Icon
+![Alt text](docs/images/screen-notifyicon.png "Notify Icon")
+
 The notify icon will be added in the notification area if you set `True` to `faf:ApplicationConfiguration.HasNotifyIcon` in `App.xaml`.
 An instance of `INotifyIconService` will be registered in DI Container and you can get it by the following code.
 ```xml
@@ -286,6 +295,7 @@ public partial class App : FastWpfApplication
     protected override void RegisterNotifyIconContextMenuItems(ContextMenuContainer container)
     {
         base.RegisterNotifyIconContextMenuItems(container);
+
         container.Add("Item 1", new ReactiveCommand().WithSubscribe(() => { MessageBox.Show("'Item 1' is clicked!"); }));
     }
     ...
@@ -315,8 +325,8 @@ settingRegistry.Register<string>("test", string.Empty);
 You can add your own classes in application settings.
 You need to implement these classes as able to serialize/deserialize by `Newtonsoft.Json`.
 ```csharp
-// Register a CustomSettings type non-volatile setting.
-settingRegistry.Register<CustomSettings>();
+// Register a ThemeSettings type non-volatile setting.
+settingRegistry.Register<ThemeSettings>("theme", new ThemeSettings());
 ```
 
 ##### Volatile settings
@@ -344,10 +354,10 @@ setting.Registry.Register<string>("constName", "Sample Application", Variability
 Settings registered in `IApplicationSettingRegistry` are also registered in DI Container on `Prism`.
 Therefore, The suitable instance of setting class type will be passed into the class that registered in DI Container if this constructor arguments has any setting class type.
 ```csharp
-public class CustomSettingViewModel : CloneableModelBindingBase
+public class ThemeSettingsPageViewModel : CloneableModelBindingBase
 {
-    // The instance of CustomSettings will be automatically resolved by DI Container.
-    public CustomSettingViewModel(CustomSettings model) : base(model)
+    // The instance of ThemeSettings will be automatically resolved by DI Container.
+    public ThemeSettingsPageViewModel(ThemeSettings model) : base(model, UpdateModelTrigger.Commit)
     {
         ...
     }
@@ -357,7 +367,7 @@ public class CustomSettingViewModel : CloneableModelBindingBase
 
 You can refer the instance of setting class type by the following code.
 ```csharp
-var obj = FastWpfApplication.Current.Container.Resolve<CustomSettings>();
+var obj = FastWpfApplication.Current.Container.Resolve<ThemeSettings>();
 ```
 
 However, the instance of setting class type will be changed if application settings are reloaded or restored as default.  
@@ -365,7 +375,7 @@ You don't need to worry for each classes for [Preference Editors Navigation](#Pr
 If you refer any instance of application settings for other behaviors, I suggest you the following code as a solution.
 ```csharp
 // Refer the instance of a setting as a ReactiveProperty, and detect changes instance.
-var setting = FastWpfApplication.Current.Settings.Observe<CustomSettings>(o => o.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
+var setting = FastWpfApplication.Current.Settings.Observe<ThemeSettings>(o => o.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
 // Refer the property in a setting as a ReactiveProperty.
 var property1 = setting.ObserveProperty(v => v.Value!.Property1).ToReadOnlyReactivePropertySlim().AddTo(this);
 ```
@@ -374,7 +384,7 @@ var property1 = setting.ObserveProperty(v => v.Value!.Property1).ToReadOnlyReact
 If you give `ApplicationSetting` attribute as the following code, you can set the schema version of this setting.
 ```csharp
 [ApplicationSetting(Version = "1.0")]
-public class CustomSettings : CloneableModelBase
+public class ThemeSettings : CloneableModelBase
 {
     ...
 }
@@ -395,10 +405,10 @@ App.Current.Logger.LogInformation("Logging Sample");
 In addition, `ILogger` instance is registered in DI Container on `Prism`.
 So, you can also get it in the constructor of classes registered in there.
 ```csharp
-public class CustomSettingViewModel : CloneableModelBindingBase
+public class ThemeSettingsPageViewModel : CloneableModelBindingBase
 {
-    // The instance of CustomSettings will be automatically resolved by DI Container.
-    public CustomSettingViewModel(CustomSettings model, ILogger logger) : base(model)
+    // The instance of ThemeSettings will be automatically resolved by DI Container.
+    public ThemeSettingsPageViewModel(ThemeSettings model, ILogger logger) : base(model, UpdateModelTrigger.Commit)
     {
         logger.LogInformation("Logging Sample");
         ...
@@ -460,3 +470,8 @@ public partial class App : FastWpfApplication
 * [MaterialDesignThemes.MahApps](https://www.nuget.org/packages/MaterialDesignThemes.MahApps)
 * [MahApps.Metro](https://www.nuget.org/packages/MahApps.Metro)
 * [Hardcodet.NotifyIcon.Wpf](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf)
+
+### FastAppFramework.Demo
+* [MaterialDesignExtensions](https://www.nuget.org/packages/MaterialDesignExtensions)
+* [PixiEditor.ColorPicker](https://www.nuget.org/packages/PixiEditor.ColorPicker)
+* [SharpVectors.Wpf](https://www.nuget.org/packages/SharpVectors.Wpf)

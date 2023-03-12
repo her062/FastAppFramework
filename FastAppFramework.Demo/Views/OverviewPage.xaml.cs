@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using FastAppFramework.Wpf;
 
-namespace FastAppFramework.Demo
+namespace FastAppFramework.Demo.Views
 {
-    [NavigationPage("Demo", Region = NavigationPageAttribute.RegionType.Preference)]
-    public partial class DemoSettingsPage : PreferencePage
+    [NavigationPage("Overview", Region = NavigationPageAttribute.RegionType.Custom)]
+    public partial class OverviewPage : NavigationPage
     {
-        public DemoSettingsPage()
+        public OverviewPage()
         {
             InitializeComponent();
         }
