@@ -35,8 +35,6 @@ namespace FastAppFramework.Demo
         }
         protected override void RegisterNavigationTypes(IContainerRegistry containerRegistry)
         {
-            base.RegisterNavigationTypes(containerRegistry);
-
             containerRegistry.RegisterForNavigation<FirstWizardFrame, FirstWizardFrameViewModel>();
             containerRegistry.RegisterForNavigation<LicenseAgreementPage, LicenseAgreementPageViewModel>();
             containerRegistry.RegisterForNavigation<OverviewPage, OverviewPageViewModel>();
@@ -48,8 +46,6 @@ namespace FastAppFramework.Demo
         }
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
-            base.RegisterSettingTypes(settingRegistry);
-
             settingRegistry.Register<ThemeSettings>("theme", new ThemeSettings());
         }
 #endregion
