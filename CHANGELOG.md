@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Algorithm for modularity
+- FlagsToBooleanConverter
 
 ## [0.2.0] - 2023-03-12
 ### Added
