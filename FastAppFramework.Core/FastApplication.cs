@@ -79,12 +79,13 @@ namespace FastAppFramework.Core
         {
             base.OnInitialized();
 
+            var containerExtension = this.Container.Resolve<IContainerExtension>();
             var catalog = this.Container.Resolve<IModuleCatalog>();
             // Register setting types in modules.
             {
                 foreach (var item in catalog.Modules)
                 {
-                    var module = item as IFastAppModule;
+                    var module = containerExtension.Resolve(Type.GetType(item.ModuleType)) as IFastAppModule;
                     module?.RegisterSettingTypes(this._settingContainer!);
                 }
                 // Load application settings from a file.
