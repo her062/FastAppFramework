@@ -394,6 +394,43 @@ This schema version will be stored in the application settings file.
 If you change the major version on this attribute, values in the application settings file will be ignored.
 I hope you can reap the benefits by this control if you have any breaking changes relate to this setting.
 
+### Modularity
+In this framework, we use [Modular Application Development Using Prism Library](https://prismlibrary.com/docs/modules.html) to extensible your application by additional library.
+
+#### Defining a Module
+Your class will be recognized as a module of this framework if it is implemented `IFastWpfAppModule` interface, as below code.
+```csharp
+public class Module : IFastWpfAppModule
+{
+    public void RegisterTypes(IContainerRegistry containerRegistry)
+    {
+    }
+    public void OnInitialized(IContainerProvider containerProvider)
+    {
+    }
+    public void RegisterNavigationTypes(IContainerRegistry containerRegistry)
+    {
+    }
+    public void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
+    {
+    }
+    public void RegisterContextMenuItems(ContextMenuContainer container)
+    {
+    }
+}
+```
+
+`RegisterNavigationTypes` has the same role as [View Navigation - Main Contents Navigation](#Main-Contents-Navigation).
+Also, `RegisterSettingTypes` is same as [Application Settings - Register Custom Settings](#Register-Custom-Settings), and `RegisterContextMenuItems` is same as [Notify Icon - Context Menu](#Context-Menu).
+`IFastWpfAppModule` inherits `Prism.Modularity.IModule`.
+Therefore, `RegisterTypes` and `OnInitialized` are necessary for your class.
+The usage of these methods is described in [Defining a Module](https://prismlibrary.com/docs/modules.html#defining-a-module).
+> **Warning**
+> Note that `RegisterNavigationTypes`, `RegisterSettingTypes` and `RegisterContextMenuItems` will be called after `OnInitialized` is called.
+
+#### Registering and Discovering Modules
+How to register/discover modules is described in [Registering and Discovering Modules](https://prismlibrary.com/docs/modules.html#registering-and-discovering-modules).
+
 ### Logging
 In this framework, we use [Microsoft.Extensions.Logging.ILogger](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-7.0) for logging.
 If you want to record any log, the following code is simplest way to get the instance of `Microsoft.Extensions.Logging.ILogger`.

@@ -11,6 +11,7 @@ using FastAppFramework.Demo.ViewModels;
 using FastAppFramework.Demo.Views;
 using FastAppFramework.Wpf;
 using Prism.Ioc;
+using Prism.Modularity;
 
 namespace FastAppFramework.Demo
 {
@@ -47,6 +48,12 @@ namespace FastAppFramework.Demo
         protected override void RegisterSettingTypes(IApplicationSettingRegistry settingRegistry)
         {
             settingRegistry.Register<ThemeSettings>("theme", new ThemeSettings());
+        }
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            base.ConfigureModuleCatalog(moduleCatalog);
+
+            moduleCatalog.AddModule<ModularityDemo.Module>();
         }
 #endregion
     }

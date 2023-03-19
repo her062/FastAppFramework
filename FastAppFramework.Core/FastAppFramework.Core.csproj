@@ -1,9 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <PackageId>FastAppFramework.Core</PackageId>
+    <Authors>her062</Authors>
+    <Description>Framework for early launch of WPF GUI applications for your projects</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/her062/FastAppFramework</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/her062/FastAppFramework.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="*"/>

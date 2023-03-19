@@ -193,6 +193,7 @@ namespace FastAppFramework.Wpf
         {
             base.OnInitialized();
 
+            var containerExtension = this.Container.Resolve<IContainerExtension>();
             if (this._containerRegistry != null)
             {
                 var catalog = this.Container.Resolve<IModuleCatalog>();
@@ -201,9 +202,10 @@ namespace FastAppFramework.Wpf
                 {
                     RegisterBaseNavigationTypes(this._containerRegistry);
                     RegisterNavigationTypes(this._containerRegistry);
+
                     foreach (var item in catalog.Modules)
                     {
-                        var module = item as IFastWpfAppModule;
+                        var module = containerExtension.Resolve(Type.GetType(item.ModuleType)) as IFastWpfAppModule;
                         module?.RegisterNavigationTypes(this._containerRegistry);
                     }
                 }
@@ -240,7 +242,7 @@ namespace FastAppFramework.Wpf
                     RegisterNotifyIconContextMenuItems(menuContainer);
                     foreach (var item in catalog.Modules)
                     {
-                        var module = item as IFastWpfAppModule;
+                        var module = containerExtension.Resolve(Type.GetType(item.ModuleType)) as IFastWpfAppModule;
                         module?.RegisterContextMenuItems(menuContainer);
                     }
                     // Add Separator immediately before 'Exit'.

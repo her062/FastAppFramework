@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2023-03-19
+### Added
+- Algorithm for modularity
+- FlagsToBooleanConverter
+
 ## [0.2.0] - 2023-03-12
 ### Added
 - CustomPopupComboBox, SearchableComboBox
