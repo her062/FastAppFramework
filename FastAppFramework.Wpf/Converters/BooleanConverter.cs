@@ -99,12 +99,14 @@ namespace FastAppFramework.Wpf.Converters
 #endregion
     }
 
+    [ValueConversion(typeof(bool), typeof(Visibility))]
     public class BooleanToVisibilityConverter : BooleanConverter<Visibility>
     {
         public BooleanToVisibilityConverter() : base(Visibility.Visible, Visibility.Collapsed)
         {
         }
     }
+    [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : BooleanConverter<bool>
     {
         public InverseBooleanConverter() : base(false, true)

@@ -21,6 +21,8 @@
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SideNavigationBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/CustomPopupComboBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/SearchableComboBox.xaml" />
+        <!-- FastAppFramework Converters -->
+        <ResourceDictionary Source="pack://application:,,,/FastAppFramework.Wpf;component/Themes/Converters.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- MahApps Brushes -->
@@ -50,11 +52,4 @@
     <Style TargetType="{x:Type local:SideNavigationBar}" BasedOn="{StaticResource FastAppFramework.Wpf.SideNavigationBar}" />
     <Style TargetType="{x:Type local:CustomPopupComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.CustomPopupComboBox.Filled}" />
     <Style TargetType="{x:Type local:SearchableComboBox}" BasedOn="{StaticResource FastAppFramework.Wpf.SearchableComboBox.Filled}" />
-
-    <!-- Frequently Converters -->
-    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-    <converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible" />
-    <converters:ColorToSolidBrushConverter x:Key="ColorToSolidBrushConverter" />
-    <converters:DataTypeConverter x:Key="DataTypeConverter" />
 </ResourceDictionary>

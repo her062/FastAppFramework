@@ -7,6 +7,7 @@ using System.Windows.Data;
 
 namespace FastAppFramework.Wpf.Converters
 {
+    [ValueConversion(typeof(Type), typeof(string))]
     public class DataTypeConverter : IValueConverter
     {
 #region Public Functions
