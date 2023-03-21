@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FastAppFramework.Wpf"
+                    xmlns:converters="clr-namespace:FastAppFramework.Wpf.Converters">
+    <!-- Frequently Converters -->
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+    <converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible" />
+    <converters:ColorToSolidBrushConverter x:Key="ColorToSolidBrushConverter" />
+    <converters:DataTypeConverter x:Key="DataTypeConverter" />
+    <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    <converters:FlagsToBooleanConverter x:Key="FlagsToBooleanConverter" />
+</ResourceDictionary>

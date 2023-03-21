@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Xml.Schema;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,7 +9,7 @@ using System.Windows.Data;
 namespace FastAppFramework.Wpf.Converters
 {
     [ValueConversion(typeof(Enum), typeof(bool), ParameterType = typeof(Enum))]
-    public class FlagsToBooleanConverter : IValueConverter
+    public class EnumToBooleanConverter : IValueConverter
     {
 #region Properties
         public object? TrueValue
@@ -22,12 +20,11 @@ namespace FastAppFramework.Wpf.Converters
 #endregion
 
 #region Fields
-        private object? _latestValue;
         private object? _trueValue;
 #endregion
 
 #region Constructor/Destructor
-        public FlagsToBooleanConverter()
+        public EnumToBooleanConverter()
         {
         }
 #endregion
@@ -35,54 +32,40 @@ namespace FastAppFramework.Wpf.Converters
 #region Public Functions
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Enum)
+            if (value is Enum v)
             {
-                this._latestValue = value;
                 object? mask = this.TrueValue;
                 if (mask == null)
                 {
                     if (parameter.GetType() == value.GetType())
                         mask = parameter;
-                    else if (parameter is string str)
+                    if (parameter is string str)
                         mask = Enum.Parse(value.GetType(), str);
                 }
 
                 if (mask != null)
-                {
-                    ulong v = System.Convert.ToUInt64(value);
-                    ulong m = System.Convert.ToUInt64(mask);
-
-                    return ((v & m) == m);
-                }
+                    return v.Equals(mask);
             }
             return DependencyProperty.UnsetValue;
         }
+
         public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (this._latestValue == null)
-                throw new InvalidOperationException();
-
-            if ((value is bool v) && (targetType.IsSubclassOf(typeof(Enum))))
+            if ((value is bool v) && targetType.IsSubclassOf(typeof(Enum)))
             {
-                object? mask = this.TrueValue;
-                if (mask == null)
+                if (v)
                 {
-                    if (parameter.GetType() == targetType)
-                        mask = parameter;
-                    else if (parameter is string str)
-                        mask = Enum.Parse(targetType, str);
-                }
+                    object? mask = this.TrueValue;
+                    if (mask == null)
+                    {
+                        if (parameter.GetType() == targetType)
+                            mask = parameter;
+                        if (parameter is string str)
+                            mask = Enum.Parse(targetType, str);
+                    }
 
-                if (mask != null)
-                {
-                    ulong l = System.Convert.ToUInt64(this._latestValue);
-                    ulong m = System.Convert.ToUInt64(mask);
-
-                    if (v)
-                        this._latestValue = Enum.ToObject(targetType, (l | m));
-                    else if (!v && ((l & m) == m))
-                        this._latestValue = Enum.ToObject(targetType, (l - m));
-                    return this._latestValue;
+                    if (mask != null)
+                        return mask;
                 }
             }
             return DependencyProperty.UnsetValue;
@@ -91,7 +74,7 @@ namespace FastAppFramework.Wpf.Converters
     }
 
     [ValueConversion(typeof(Enum), typeof(bool), ParameterType = typeof(Enum))]
-    public class FlagsToBooleanConverter<T> : FlagsToBooleanConverter where T : struct, Enum
+    public class EnumToBooleanConverter<T> : EnumToBooleanConverter where T : struct, Enum
     {
 #region Properties
         public new T? TrueValue
@@ -102,7 +85,7 @@ namespace FastAppFramework.Wpf.Converters
 #endregion
 
 #region Constructor/Destructor
-        public FlagsToBooleanConverter()
+        public EnumToBooleanConverter()
         {
         }
 #endregion
