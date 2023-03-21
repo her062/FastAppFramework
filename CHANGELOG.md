@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.4.0] - 2023-03-21
 ### Added
 - EnumToBooleanConverter
 - ReactivePropertyExtensions.SetValidateAttribute
